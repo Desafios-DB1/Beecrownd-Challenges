@@ -1,11 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using _1001___Extremely_Basic.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace _1001___Extremely_Basic.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class SumController
+[Route("/api/[controller]")]
+public class SumController : ControllerBase
 {
+    private static readonly SumService _sumService;
+
+    public SumController(SumService sumService)
+    {
+        _sumService = sumService;
+    }
+    
+    
     [HttpGet]
     public string Get()
     {
