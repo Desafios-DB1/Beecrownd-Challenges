@@ -22,5 +22,11 @@ public class SumController : ControllerBase
         return Ok(new { message = "Valores armazenados com sucesso!" });
     }
     
-    
+    [HttpGet]
+    public IActionResult GetSum()
+    {
+        var result = _sumService.GetSum();
+        if (result == null) return NotFound(new { message = "Nenhum valor armazenado ainda!"});
+        return Ok(new { sum = result });
+    }
 }
