@@ -8,7 +8,7 @@ namespace _1001___Extremely_Basic.Controllers;
 [Route("/api/[controller]")]
 public class SumController : ControllerBase
 {
-    private static readonly SumService _sumService;
+    private readonly SumService _sumService;
 
     public SumController(SumService sumService)
     {
