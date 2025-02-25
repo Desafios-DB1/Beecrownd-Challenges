@@ -1,4 +1,5 @@
-﻿using _1001___Extremely_Basic.Services;
+﻿using _1001___Extremely_Basic.DTOs;
+using _1001___Extremely_Basic.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _1001___Extremely_Basic.Controllers;
@@ -13,11 +14,13 @@ public class SumController : ControllerBase
     {
         _sumService = sumService;
     }
-    
-    
-    [HttpGet]
-    public string Get()
+
+    [HttpPost]
+    public IActionResult PostNumbers([FromBody] SumRequest request)
     {
-        return "Teste 2";
+        _sumService.StoreValues(request);
+        return Ok(new { message = "Valores armazenados com sucesso!" });
     }
+    
+    
 }
