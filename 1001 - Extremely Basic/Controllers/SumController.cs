@@ -9,6 +9,6 @@ public class SumController
     [HttpGet]
     public string Get()
     {
-        return "Teste";
+        return "Teste 2";
     }
 }
