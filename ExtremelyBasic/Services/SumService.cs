@@ -6,7 +6,7 @@ public class SumService
 {
     private SumRequest? _currentValues;
 
-    public virtual void StoreValues(SumRequest values)
+    public void StoreValues(SumRequest values)
     {
         _currentValues = values;
     }
