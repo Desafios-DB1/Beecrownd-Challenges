@@ -18,6 +18,11 @@ public class SumController : ControllerBase
     [HttpPost]
     public IActionResult PostNumbers([FromBody] SumRequest request)
     {
+        if (request.Number1 == null || request.Number2 == null)
+        {
+            return BadRequest(new ResponseMessage("Requisição inválida!"));
+        }
+        
         _sumService.StoreValues(request);
         return Ok(new ResponseMessage("Valores armazenados com sucesso!"));
     }
