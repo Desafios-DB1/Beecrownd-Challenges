@@ -21,8 +21,13 @@ public class ContestantService
         return _contestants.ToList();
     }
 
-    public ContestantData GetContestantById(int id)
+    public void AddPoints(int contestantId, int points)
     {
-        return _contestants.FirstOrDefault(x => x.Id == id);
+        var contestant = _contestants.FirstOrDefault(c => c.Id == contestantId);
+        if (contestant == null)
+        {
+            throw new Exception("Competidor não encontrado");
+        }
+        contestant.Points += points;
     }
 }
