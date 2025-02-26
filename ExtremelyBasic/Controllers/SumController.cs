@@ -31,7 +31,7 @@ public class SumController : ControllerBase
     public IActionResult GetSum()
     {
         var result = _sumService.GetSum();
-        if (result == null) return NotFound(new { message = "Nenhum valor armazenado ainda!"});
+        if (result == null) return NotFound(new ResponseMessage("Nenhum valor armazenado ainda!"));
         return Ok(new ResponseMessage($"A soma dos valores é: {result}"));
     }
 }
