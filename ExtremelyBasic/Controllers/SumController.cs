@@ -22,6 +22,11 @@ public class SumController : ControllerBase
         {
             return BadRequest(new ResponseMessage("Requisição inválida!"));
         }
+
+        if (request.Number1 < 0 || request.Number2 < 0)
+        {
+            return BadRequest(new ResponseMessage("Requisição inválida!"));
+        }
         
         try
         {
