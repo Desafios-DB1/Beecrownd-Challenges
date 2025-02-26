@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<ContestantService>();
+builder.Services.AddSingleton<ChallengeService>();
 
 var app = builder.Build();
 
