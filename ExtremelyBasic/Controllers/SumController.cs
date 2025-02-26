@@ -19,7 +19,7 @@ public class SumController : ControllerBase
     public IActionResult PostNumbers([FromBody] SumRequest request)
     {
         _sumService.StoreValues(request);
-        return Ok(new { message = "Valores armazenados com sucesso!" });
+        return Ok(new ResponseMessage("Valores armazenados com sucesso!"));
     }
     
     [HttpGet]
@@ -27,6 +27,6 @@ public class SumController : ControllerBase
     {
         var result = _sumService.GetSum();
         if (result == null) return NotFound(new { message = "Nenhum valor armazenado ainda!"});
-        return Ok(new { sum = result });
+        return Ok(new ResponseMessage($"A soma dos valores é: {result}"));
     }
 }
