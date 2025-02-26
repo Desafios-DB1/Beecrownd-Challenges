@@ -23,15 +23,29 @@ public class SumController : ControllerBase
             return BadRequest(new ResponseMessage("Requisição inválida!"));
         }
         
-        _sumService.StoreValues(request);
-        return Ok(new ResponseMessage("Valores armazenados com sucesso!"));
+        try
+        {
+            _sumService.StoreValues(request);
+            return Ok(new ResponseMessage("Valores armazenados com sucesso!"));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new ResponseMessage("Erro interno!"));
+        }
     }
     
     [HttpGet]
     public IActionResult GetSum()
     {
-        var result = _sumService.GetSum();
-        if (result == null) return NotFound(new ResponseMessage("Nenhum valor armazenado ainda!"));
-        return Ok(new ResponseMessage($"A soma dos valores é: {result}"));
+        try
+        {
+            var result = _sumService.GetSum();
+            if (result == null) return NotFound(new ResponseMessage("Nenhum valor armazenado ainda!"));
+            return Ok(new ResponseMessage($"A soma dos valores é: {result}"));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new ResponseMessage("Erro interno!"));
+        }
     }
 }
