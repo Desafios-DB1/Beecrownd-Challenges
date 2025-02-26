@@ -1,0 +1,6 @@
+@IdentificandoCha_HostAddress = http://localhost:5103
+
+GET {{IdentificandoCha_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
