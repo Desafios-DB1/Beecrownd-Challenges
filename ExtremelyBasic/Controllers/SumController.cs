@@ -30,7 +30,7 @@ public class SumController : ControllerBase
         }
         catch (Exception e)
         {
-            return StatusCode(500, new ResponseMessage("Erro interno!"));
+            return BadRequest(new ResponseMessage("Erro interno!"));
         }
     }
     
@@ -45,7 +45,7 @@ public class SumController : ControllerBase
         }
         catch (Exception e)
         {
-            return StatusCode(500, new ResponseMessage("Erro interno!"));
+            return BadRequest(new ResponseMessage("Erro interno!"));
         }
     }
 }
