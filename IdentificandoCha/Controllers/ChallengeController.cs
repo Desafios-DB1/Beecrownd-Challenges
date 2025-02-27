@@ -6,17 +6,9 @@ namespace IdentificandoCha.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ChallengeController : ControllerBase
+public class ChallengeController(ChallengeService challengeService)
+    : ControllerBase
 {
-    private readonly ContestantService _contestantService;
-    private readonly ChallengeService _challengeService;
-
-    public ChallengeController(ContestantService contestantService, ChallengeService challengeService)
-    {
-        _contestantService = contestantService;
-        _challengeService = challengeService;
-    }
-    
     [HttpGet]
     public IActionResult GetChallenge()
     {
@@ -27,10 +19,10 @@ public class ChallengeController : ControllerBase
             "faça o post para o endpoint /challenge para informar as respostas e atualizar os pontos!"));
     }
 
-    [HttpPost("{challengeId}/answers")]
+    [HttpPost("{challengeId:int}/answers")]
     public IActionResult PostChallengeAnswers(int challengeId, [FromBody] List<ContestantAnswer> answers)
     {
-        if (answers.Count < _contestantService.GetAllContestants().Count)
+        if (answers.Count < ContestantService.GetAllContestants()!.Count)
         {
             return BadRequest(new ResponseMessage("Todos os participantes devem enviar apenas uma resposta!"));
         }
@@ -40,7 +32,7 @@ public class ChallengeController : ControllerBase
             ChallengeId = challengeId,
             Answers = answers,
         };
-        _challengeService.CheckAnswers(request);
+        challengeService.CheckAnswers(request);
         
         return Ok(new ResponseMessage("Respostas enviadas com sucesso!"));
     }
