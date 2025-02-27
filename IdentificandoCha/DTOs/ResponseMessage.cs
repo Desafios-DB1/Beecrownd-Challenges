@@ -2,5 +2,5 @@
 
 public class ResponseMessage(string message)
 {
-    public string Message { get; set; } = message;
+    public string Message { get; } = message;
 }
