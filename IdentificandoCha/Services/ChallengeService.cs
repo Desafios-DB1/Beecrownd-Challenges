@@ -2,10 +2,8 @@
 
 namespace IdentificandoCha.Services;
 
-public class ChallengeService
+public class ChallengeService(ContestantService contestantService)
 {
-    private readonly ContestantService _contestantService;
-
     private readonly Dictionary<int, int> _correctAnswers = new()
     {
         { 1, 3 },
@@ -15,26 +13,16 @@ public class ChallengeService
         { 5, 5 },
     };
 
-    public ChallengeService(ContestantService contestantService)
-    {
-        _contestantService = contestantService;
-    }
-
     public void CheckAnswers(AnswersRequest request)
     {
-        if (!_correctAnswers.ContainsKey(request.ChallengeId))
+        if (!_correctAnswers.TryGetValue(request.ChallengeId, out var correctAnswer))
         {
             throw new Exception("Challenge not found");
         }
-        
-        var correctAnswer = _correctAnswers[request.ChallengeId];
 
-        foreach (var contestantAnswer in request.Answers)
+        foreach (var contestant in request.Answers.Where(contestant => contestant.Answer == correctAnswer))
         {
-            if (contestantAnswer.Answer == correctAnswer)
-            {
-                _contestantService.AddPoints(contestantAnswer.ContestantId, 100);
-            }
+            ContestantService.AddPoints(contestant.ContestantId, 100);
         }
     }
 }
