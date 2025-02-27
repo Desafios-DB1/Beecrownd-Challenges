@@ -2,6 +2,6 @@
 
 public class AnswersRequest
 {
-    public int ChallengeId { get; set; }
-    public List<ContestantAnswer> Answers { get; set; }
+    public int ChallengeId { get; init; }
+    public required List<ContestantAnswer> Answers { get; init; }
 }
