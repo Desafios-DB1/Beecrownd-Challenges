@@ -6,27 +6,24 @@ namespace IdentificandoCha.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ContestantController : ControllerBase
+public class ContestantController() : ControllerBase
 {
-    private readonly ContestantService _contestantService;
-
-    public ContestantController(ContestantService contestantService)
-    {
-        _contestantService = contestantService;
-    }
-    
     [HttpPost]
     public IActionResult RegisterContestants([FromBody] ContestantData contestant)
     {
         if (string.IsNullOrEmpty(contestant.Name)) {return BadRequest(new ResponseMessage("Forneça um nome para o competidor!"));}
-        var newContestant = _contestantService.AddContestant(contestant);
+        var newContestant = ContestantService.AddContestant(contestant);
         return CreatedAtAction(nameof(GetContestants), $"{newContestant.Name} foi registrado com sucesso! Seu número é {newContestant.Id}");
     }
 
     [HttpGet]
     public IActionResult GetContestants()
     {
-        var contestants = _contestantService.GetAllContestants();
+        var contestants = ContestantService.GetAllContestants();
+        if (contestants?.Count == 0 || contestants == null)
+        {
+            return NoContent();
+        }
         return Ok(contestants);
     }
 }
