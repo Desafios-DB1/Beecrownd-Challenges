@@ -1,9 +1,11 @@
-﻿namespace IdentificandoCha.Services;
+﻿using IdentificandoCha.Interfaces.Services;
 
-public class ScoringService (ContestantService contestantService)
+namespace IdentificandoCha.Services;
+
+public class ScoringService (IContestantService contestantService) : IScoringService
 {
-    public static void AddPoints(int contestantId, int points)
+    public void AddPoints(int contestantId, int points)
     {
-        ContestantService.AddPoints(contestantId, points);
+        contestantService.AddPoints(contestantId, points);
     }
 }
