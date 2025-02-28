@@ -18,7 +18,7 @@ public class ChallengeService(
 
         foreach (var contestant in request.Answers.Where(c => c.Answer == correctAnswer))
         {
-            scoringService.AddPoints(contestant.ContestantId, 100);
+            ScoringService.AddPoints(contestant.ContestantId, 100);
         }
     }
 
