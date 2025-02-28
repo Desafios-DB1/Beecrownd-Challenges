@@ -1,35 +1,35 @@
 ﻿using IdentificandoCha.DTOs;
-
+using IdentificandoCha.Interfaces.Repository;
 namespace IdentificandoCha.Repository;
 
-public class ContestantRepository
+public class ContestantRepository : IContestantRepository
 {
     private static readonly List<ContestantData> Contestants = [];
-    private static int _currentId = 0;
+    private static int _currentId;
     
-    public static ContestantData Add(ContestantData contestant)
+    public ContestantData Add(ContestantData contestant)
     {
         contestant.Id= ++_currentId;
         Contestants.Add(contestant);
         return contestant;
     }
     
-    public static List<ContestantData> GetAll()
+    public List<ContestantData> GetAll()
     {
         return Contestants.ToList();
     }
 
-    public static ContestantData? GetById(int id)
+    public ContestantData GetById(int id)
     {
-        return Contestants.FirstOrDefault(c => c.Id == id);
+        return Contestants.FirstOrDefault(c => c.Id == id)!;
     }
 
-    public static void AddPoints(ContestantData contestant, int points)
+    public void AddPoints(ContestantData contestant, int points)
     {
         contestant.Points += points;
     }
 
-    public static bool Exists(int id)
+    public bool Exists(int id)
     {
         return Contestants.Any(c => c.Id == id);
     }
