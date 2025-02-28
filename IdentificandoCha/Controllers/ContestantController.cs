@@ -20,14 +20,14 @@ public class ContestantController(IValidator<ContestantData> validator, Contesta
             throw new BusinessException(errors);
         }
         
-        var newContestant = contestantService.AddContestant(contestant);
+        var newContestant = ContestantService.AddContestant(contestant);
         return CreatedAtAction(nameof(GetContestants), $"{newContestant.Name} foi registrado com sucesso! Seu número é {newContestant.Id}");
     }
 
     [HttpGet]
     public IActionResult GetContestants()
     {
-        var contestants = contestantService.GetAllContestants();
+        var contestants = ContestantService.GetAllContestants();
         if (contestants?.Count == 0 || contestants == null)
         {
             return NoContent();
