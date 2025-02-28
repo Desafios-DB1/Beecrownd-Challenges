@@ -22,9 +22,10 @@ public class ChallengeController(ChallengeService challengeService)
     [HttpPost("{challengeId:int}/answers")]
     public IActionResult PostChallengeAnswers(int challengeId, [FromBody] List<ContestantAnswer> answers)
     {
-        if (answers.Count < ContestantService.GetAllContestants()!.Count)
+        var validation = challengeService.ValidateAnswers(answers);
+        if (!validation.IsValid)
         {
-            return BadRequest(new ResponseMessage("Todos os participantes devem enviar apenas uma resposta!"));
+            return BadRequest(new ResponseMessage(validation.Errors.First().ErrorMessage));
         }
 
         var request = new AnswersRequest()
@@ -32,6 +33,7 @@ public class ChallengeController(ChallengeService challengeService)
             ChallengeId = challengeId,
             Answers = answers,
         };
+        
         challengeService.CheckAnswers(request);
         
         return Ok(new ResponseMessage("Respostas enviadas com sucesso!"));
