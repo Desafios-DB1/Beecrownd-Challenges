@@ -1,25 +1,27 @@
 ﻿using IdentificandoCha.DTOs;
+using IdentificandoCha.Interfaces.Repository;
+using IdentificandoCha.Interfaces.Services;
 using IdentificandoCha.Repository;
 
 namespace IdentificandoCha.Services;
 
-public class ContestantService ()
+public class ContestantService (IContestantRepository contestantRepository) : IContestantService
 {
-    public static ContestantData AddContestant(ContestantData contestant)
+    public ContestantData AddContestant(ContestantData contestant)
     {
-        return ContestantRepository.Add(contestant);
+        return contestantRepository.Add(contestant);
     }
     
-    public static List<ContestantData> GetAllContestants()
+    public List<ContestantData> GetAllContestants()
     {
-        return ContestantRepository.GetAll();
+        return contestantRepository.GetAll();
     }
 
-    public static void AddPoints(int contestantId, int points)
+    public void AddPoints(int contestantId, int points)
     {
-        if (!ContestantRepository.Exists(contestantId)) return;
+        if (!contestantRepository.Exists(contestantId)) return;
         
-        var contestant = ContestantRepository.GetById(contestantId);
-        ContestantRepository.AddPoints(contestant!, points);
+        var contestant = contestantRepository.GetById(contestantId);
+        contestantRepository.AddPoints(contestant!, points);
     }
 }
