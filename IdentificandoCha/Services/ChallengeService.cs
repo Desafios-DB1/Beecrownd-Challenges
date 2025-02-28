@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using IdentificandoCha.DTOs;
 using IdentificandoCha.Exceptions;
+using IdentificandoCha.Interfaces.Services;
 using IdentificandoCha.Repository;
 
 namespace IdentificandoCha.Services;
@@ -9,7 +10,8 @@ namespace IdentificandoCha.Services;
 public class ChallengeService(
     IValidator<List<ContestantAnswer>> answerValidator,
     ChallengeRepository challengeRepository,
-    ScoringService scoringService)
+    IScoringService scoringService)
+    : IChallengeServices
 {
     public void CheckAnswers(AnswersRequest request)
     {
@@ -18,7 +20,7 @@ public class ChallengeService(
 
         foreach (var contestant in request.Answers.Where(c => c.Answer == correctAnswer))
         {
-            ScoringService.AddPoints(contestant.ContestantId, 100);
+            scoringService.AddPoints(contestant.ContestantId, 100);
         }
     }
 
