@@ -1,6 +1,8 @@
-﻿namespace IdentificandoCha.Repository;
+﻿using IdentificandoCha.Interfaces.Repository;
 
-public class ChallengeRepository
+namespace IdentificandoCha.Repository;
+
+public class ChallengeRepository : IChallengeRepository
 {
     private readonly Dictionary<int, int> _correctAnswers = new()
     {
