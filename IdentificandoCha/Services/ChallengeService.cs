@@ -1,28 +1,30 @@
-﻿using IdentificandoCha.DTOs;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using IdentificandoCha.DTOs;
+using IdentificandoCha.Exceptions;
+using IdentificandoCha.Repository;
 
 namespace IdentificandoCha.Services;
 
-public class ChallengeService(ContestantService contestantService)
+public class ChallengeService(
+    IValidator<List<ContestantAnswer>> answerValidator,
+    ChallengeRepository challengeRepository,
+    ScoringService scoringService)
 {
-    private readonly Dictionary<int, int> _correctAnswers = new()
-    {
-        { 1, 3 },
-        { 2, 4 },
-        { 3, 1 },
-        { 4, 2 },
-        { 5, 5 },
-    };
-
     public void CheckAnswers(AnswersRequest request)
     {
-        if (!_correctAnswers.TryGetValue(request.ChallengeId, out var correctAnswer))
-        {
-            throw new Exception("Challenge not found");
-        }
+        var correctAnswer = challengeRepository.GetCorrectAnswer(request.ChallengeId)
+                            ?? throw new BusinessException("Desafio não encontrado!");
 
-        foreach (var contestant in request.Answers.Where(contestant => contestant.Answer == correctAnswer))
+        foreach (var contestant in request.Answers.Where(c => c.Answer == correctAnswer))
         {
-            ContestantService.AddPoints(contestant.ContestantId, 100);
+            scoringService.AddPoints(contestant.ContestantId, 100);
         }
+    }
+
+    public ValidationResult ValidateAnswers(List<ContestantAnswer> answers)
+    {
+        var validationResult = answerValidator.Validate(answers);
+        return !validationResult.IsValid ? validationResult : new ValidationResult();
     }
 }
