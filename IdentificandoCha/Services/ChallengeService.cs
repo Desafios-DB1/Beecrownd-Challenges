@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using IdentificandoCha.DTOs;
 using IdentificandoCha.Exceptions;
+using IdentificandoCha.Interfaces.Repository;
 using IdentificandoCha.Interfaces.Services;
 using IdentificandoCha.Repository;
 
@@ -9,7 +10,7 @@ namespace IdentificandoCha.Services;
 
 public class ChallengeService(
     IValidator<List<ContestantAnswer>> answerValidator,
-    ChallengeRepository challengeRepository,
+    IChallengeRepository challengeRepository,
     IScoringService scoringService)
     : IChallengeServices
 {
