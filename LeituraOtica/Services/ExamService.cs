@@ -15,10 +15,10 @@ public class ExamService(IExamRepository examRepository,
         var validationResult = examValidator.Validate(exam);
         if (!validationResult.IsValid)
         {
-            return validationResult;
+            return OperationResult.Failure(validationResult.Errors.FirstOrDefault()?.ToString());
         }
         examRepository.Add(exam);
-        return exam;
+        return OperationResult.Success(exam);
     }
 
     public List<ExamDto>? GetAllExams()

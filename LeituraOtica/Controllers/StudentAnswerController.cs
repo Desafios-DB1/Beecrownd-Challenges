@@ -12,8 +12,11 @@ public class StudentAnswerController(IStudentAnswerService studentAnswerService)
     public IActionResult AddStudentAnswer(StudentAnswerDto studentAnswer)
     {
         var result = studentAnswerService.AddStudentAnswer(studentAnswer);
-        
-        if (result is { Success: false, ValidationErrors: not null }) return BadRequest(result.ValidationErrors.Errors);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
         
         return Ok(result.Data);
     }

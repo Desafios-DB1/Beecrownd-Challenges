@@ -15,13 +15,13 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
         var validationResult = studentAnswerValidator.Validate(answer);
         if (!validationResult.IsValid)
         {
-            return validationResult;
+            return OperationResult.Failure(validationResult.Errors.FirstOrDefault()?.ToString());
         }
         
         answer.Grade = examCorrectionService.Correction(answer);
         
         studentAnswerRepository.Add(answer);
-        return answer;
+        return OperationResult.Success(answer);
     }
 
     public StudentAnswerDto? GetStudentAnswerById(int id)

@@ -15,10 +15,10 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
         var validationResult = answerKeyValidator.Validate(answerKey);
         if (!validationResult.IsValid)
         { 
-            return validationResult;
+            return OperationResult.Failure(validationResult.Errors.FirstOrDefault()?.ToString());
         }
         answerKeyRepository.Save(answerKey);
-        return answerKey;
+        return OperationResult.Success(answerKey);
     }
 
     public AnswerKeyDto? GetAnswerKey(int examId, int answerKeyId)

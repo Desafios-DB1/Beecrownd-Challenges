@@ -14,7 +14,10 @@ public class ExamController(IExamService examService) : ControllerBase
     {
         var result = examService.AddExam(exam);
 
-        if (result is { Success: false, ValidationErrors: not null }) return BadRequest(result.ValidationErrors.Errors);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
 
         return Ok(result.Data);
     }

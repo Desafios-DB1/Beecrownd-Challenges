@@ -12,8 +12,11 @@ public class AnswerKeyController (IAnswerKeyService answerKeyService) : Controll
     public IActionResult SaveAnswerKey(AnswerKeyDto answerKey)
     {
         var result = answerKeyService.SaveAnswerKey(answerKey);
-        
-        if (result is { Success: false, ValidationErrors: not null }) return BadRequest(result.ValidationErrors.Errors);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
         
         return Ok(result.Data);
     }

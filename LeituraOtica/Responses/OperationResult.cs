@@ -3,46 +3,19 @@ using LeituraOtica.Dtos;
 
 namespace LeituraOtica.Responses;
 
-public class OperationResult
+public class OperationResult(bool isSuccess, string? errorMessage = null, object? data = null)
 {
-    public bool Success { get; set; }
-    public string? Message { get; set; }
-    public object? Data { get; set; }
-    public ValidationResult? ValidationErrors { get; set; }
+    public bool IsSuccess => isSuccess;
+    public string? ErrorMessage => errorMessage;
+    public object? Data => data;
     
-    public OperationResult(){}
-
-    private OperationResult(object data)
+    public static OperationResult Success(object? data = null)
     {
-        Success = true;
-        Data = data;
-        Message = "Adicionado com sucesso!";
+        return new OperationResult(true, null, data);
     }
 
-    private OperationResult(ValidationResult validationResult)
+    public static OperationResult Failure(string? errorMessage = null)
     {
-        Success = validationResult.IsValid;
-        Message = validationResult.Errors.FirstOrDefault()?.ErrorMessage;
-        ValidationErrors = validationResult;
-    }
-
-    public static implicit operator OperationResult(ExamDto exam)
-    {
-        return new OperationResult(exam);
-    }
-
-    public static implicit operator OperationResult(ValidationResult validationResult)
-    {
-        return new OperationResult(validationResult);
-    }
-
-    public static implicit operator OperationResult(AnswerKeyDto answerKey)
-    {
-        return new OperationResult(answerKey);
-    }
-
-    public static implicit operator OperationResult(StudentAnswerDto studentAnswer)
-    {
-        return new OperationResult(studentAnswer);
+        return new OperationResult(false, errorMessage, null);
     }
 }

@@ -8,10 +8,11 @@ public class AnswerKeyRepository : IAnswerKeyRepository
     private static readonly List<AnswerKeyDto> AnswersKeys = [];
     private static int _currentId;
     
-    public void Save(AnswerKeyDto answerKey)
+    public AnswerKeyDto Save(AnswerKeyDto answerKey)
     {
         answerKey.Id = ++_currentId;
         AnswersKeys.Add(answerKey);
+        return answerKey;
     }
 
     public AnswerKeyDto? GetById(int answerKeyId)
