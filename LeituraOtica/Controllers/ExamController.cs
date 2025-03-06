@@ -35,7 +35,7 @@ public class ExamController(IExamService examService) : ControllerBase
     public IActionResult GetExam(int examId)
     {
         var result = examService.GetExam(examId);
-        if (result == null) return NotFound();
+        if (result == null) return NotFound("Prova não encontrada!");
         return Ok(result);
     }
 }
