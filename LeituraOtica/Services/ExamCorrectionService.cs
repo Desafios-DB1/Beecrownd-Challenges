@@ -7,16 +7,15 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
 {
     public double Correction(StudentAnswerDto input)
     {
-        var studentAnswers = input.Answers;
+        var studentAnswers = input.ConvertedAnswers;
         var correctAnswers = answerKeyService.GetAnswerKey(input.AnswerKeyId)?.Answers;
 
         if (correctAnswers == null)
             return 0;
 
-        foreach (var answer in correctAnswers)
+        foreach (var answer in correctAnswers.Where(answer => answer.Value == studentAnswers![answer.Key]))
         {
-            if (studentAnswers.TryGetValue(answer.Key, out var studentAnswer) && studentAnswer == answer.Value)
-                input.Grade++;
+            input.Grade++;
         }
         
         var exam = examService.GetExam(input.ExamId);
