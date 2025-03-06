@@ -1,10 +1,9 @@
 ﻿namespace LeituraOtica.Dtos;
 
-public class ExamDto
+public class ExamDto(double value, string? responsibleName, string? subjectName)
 {
     public int Id { get; set; }
-    public string? SubjectName { get; set; }
-    public string? ResponsibleName { get; set; }
-    public string? ClassName { get; set; }
-    public double Value { get; set; }
+    public string? SubjectName { get; } = subjectName;
+    public string? ResponsibleName { get; } = responsibleName;
+    public double Value { get; } = value;
 }
