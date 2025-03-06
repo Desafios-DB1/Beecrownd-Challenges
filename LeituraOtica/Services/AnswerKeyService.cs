@@ -8,7 +8,8 @@ using LeituraOtica.Responses;
 namespace LeituraOtica.Services;
 
 public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
-    IValidator<AnswerKeyDto> answerKeyValidator) : IAnswerKeyService
+    IValidator<AnswerKeyDto> answerKeyValidator,
+    IExamService examService) : IAnswerKeyService
 {
     public OperationResult SaveAnswerKey(AnswerKeyDto answerKey)
     {
@@ -17,13 +18,20 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
         { 
             return OperationResult.Failure(validationResult.Errors.FirstOrDefault()?.ToString());
         }
+        
+        var exam = examService.GetExam(answerKey.ExamId);
+        if (exam == null)
+        {
+            return OperationResult.Failure("A prova não existe!");
+        }
+        
         answerKeyRepository.Save(answerKey);
         return OperationResult.Success(answerKey);
     }
 
-    public AnswerKeyDto? GetAnswerKey(int examId, int answerKeyId)
+    public AnswerKeyDto? GetAnswerKey(int answerKeyId)
     {
-        return answerKeyRepository.GetByExamAndKeyId(examId, answerKeyId);
+        return answerKeyRepository.GetById(answerKeyId);
     }
 
     public List<AnswerKeyDto>? GetAllAnswerKeys()
