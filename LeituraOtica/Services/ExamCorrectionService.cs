@@ -13,19 +13,17 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
         if (correctAnswers == null)
             return 0;
 
-        foreach (var answer in correctAnswers.Where(answer => answer.Value == studentAnswers![answer.Key]))
-        {
-            input.Grade++;
-        }
-        
+        var studentCorrectAnswers = correctAnswers.Count(answer => answer.Value == studentAnswers![answer.Key]);
+
         var exam = examService.GetExam(input.ExamId);
         var examValue = exam!.Value;
         var totalQuestions = correctAnswers.Count;
         
-        var questionValue = input.Grade / totalQuestions;
-        var grade = questionValue * examValue;
+        var questionValue = examValue / totalQuestions;
+        var grade = questionValue * studentCorrectAnswers;
         var roundedGrade = Math.Round(grade, 2);
         
+        input.Grade = roundedGrade;
         return roundedGrade;
     }
 }
