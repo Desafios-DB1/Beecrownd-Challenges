@@ -11,9 +11,13 @@
       &lt;TestId&gt;xUnit::EC51001B-CE73-4992-B058-50E8E96F7276::net9.0::IdentificandoChaTest.ContestantControllerTest&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;xUnit::EC51001B-CE73-4992-B058-50E8E96F7276::net9.0::IdentificandoChaTest.Controllers.ChallengeControllerTest.PostChallengeAnswers_ReturnsOk_WhenAllContestantsAnswered&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;xUnit::EC51001B-CE73-4992-B058-50E8E96F7276::net9.0::IdentificandoChaTest.Controllers.ChallengeControllerTest.PostChallengeAnswers_ReturnsBadRequest_WhenNoContestantsAnswered&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Controllers.AnswerKeyControllerTest.SaveAnswerKey_ReturnsOk_WhenSuccess&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Controllers.AnswerKeyControllerTest.SaveAnswerKey_ReturnsBadRequest_WhenFail&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Controllers.AnswerKeyControllerTest.GetAnswerKeys_ReturnsOk_WhenSuccess&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
     &lt;Project Location="C:\Users\lucas.goncalves\RiderProjects\Desafios\ExtremelyBasic.Tests" Presentation="&amp;lt;1001&amp;gt;\&amp;lt;ExtremelyBasic.Tests&amp;gt;" /&gt;&#xD;
     &lt;Project Location="C:\Users\lucas.goncalves\RiderProjects\Desafios\ExtremelyBasicTests" Presentation="&amp;lt;1001&amp;gt;\&amp;lt;ExtremelyBasicTests&amp;gt;" /&gt;&#xD;
     &lt;Project Location="C:\Users\lucas.goncalves\RiderProjects\Desafios\IdentificandoCha.Test" Presentation="&amp;lt;2006&amp;gt;\&amp;lt;IdentificandoCha.Test&amp;gt;" /&gt;&#xD;
+    &lt;ProjectFolder&gt;C2206740-4DAC-4826-B98A-6DAAC1D7E54B/d:Controllers&lt;/ProjectFolder&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
