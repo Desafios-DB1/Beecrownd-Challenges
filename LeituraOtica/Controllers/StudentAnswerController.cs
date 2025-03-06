@@ -26,7 +26,7 @@ public class StudentAnswerController(IStudentAnswerService studentAnswerService)
     {
         var result = studentAnswerService.GetAllStudentsAnswers();
 
-        if (result is { Count: 0 }) return BadRequest("Nenhuma resposta encontrada!");
+        if (result is { Count: 0 }) return NoContent();
         
         return Ok(result);
     }
@@ -37,7 +37,7 @@ public class StudentAnswerController(IStudentAnswerService studentAnswerService)
     {
         var result = studentAnswerService.GetStudentAnswerById(id);
         
-        if (result == null) return BadRequest("Nenhuma resposta encontrada!");
+        if (result == null) return NotFound("Nenhuma resposta encontrada!");
         
         return Ok(result);
     }
