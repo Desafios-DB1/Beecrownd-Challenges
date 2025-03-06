@@ -8,7 +8,7 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
     public double Correction(StudentAnswerDto input)
     {
         var studentAnswers = input.Answers;
-        var correctAnswers = answerKeyService.GetAnswerKey(input.ExamId, input.AnswerKeyId)?.Answers;
+        var correctAnswers = answerKeyService.GetAnswerKey(input.AnswerKeyId)?.Answers;
 
         if (correctAnswers == null)
             return 0;
@@ -23,6 +23,10 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
         var examValue = exam!.Value;
         var totalQuestions = correctAnswers.Count;
         
-        return (input.Grade/totalQuestions)*examValue;
+        var questionValue = input.Grade / totalQuestions;
+        var grade = questionValue * examValue;
+        var roundedGrade = Math.Round(grade, 2);
+        
+        return roundedGrade;
     }
 }
