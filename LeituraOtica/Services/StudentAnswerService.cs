@@ -10,7 +10,8 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
     IValidator<StudentAnswerDto> studentAnswerValidator,
     IExamCorrectionService examCorrectionService,
     IExamService examService,
-    IAnswerKeyService answerKeyService) : IStudentAnswerService
+    IAnswerKeyService answerKeyService,
+    IOpticalConversionService opticalConversionService) : IStudentAnswerService
 {
     public OperationResult AddStudentAnswer(StudentAnswerDto answer)
     {
@@ -31,6 +32,8 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
         {
             return OperationResult.Failure("Gabarito não encontrado!");
         }
+
+        answer.ConvertedAnswers = opticalConversionService.ConvertAnswersToLetters(answer.Answers);
         
         answer.Grade = examCorrectionService.Correction(answer);
         
