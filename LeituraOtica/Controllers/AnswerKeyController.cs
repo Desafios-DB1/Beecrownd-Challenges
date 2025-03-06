@@ -36,7 +36,7 @@ public class AnswerKeyController (IAnswerKeyService answerKeyService) : Controll
     public IActionResult GetAnswerKey(int answerKeyId)
     {
         var result = answerKeyService.GetAnswerKey(answerKeyId);
-        if (result == null) return BadRequest("Gabarito não encontrado!");
+        if (result == null) return NotFound("Gabarito não encontrado!");
         return Ok(result);
     }
 }
