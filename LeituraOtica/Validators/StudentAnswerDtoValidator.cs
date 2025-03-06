@@ -18,5 +18,13 @@ public class StudentAnswerDtoValidator : AbstractValidator<StudentAnswerDto>
         
         RuleFor(x => x.Answers)
             .NotEmpty().WithMessage("A lista de respostas é obrigatoria");
+
+        RuleForEach(x => x.Answers)
+            .Must(answ => answ != null && answ.Length == 5)
+            .WithMessage("Cada resposta deve conter no mínimo 5 valores!");
+        
+        RuleForEach(x => x.Answers)
+            .Must(answ => answ.All(v => v is >= 0 and <= 255))
+            .WithMessage("Cada resposta deve estar entre 0 e 255!");
     }
 }
