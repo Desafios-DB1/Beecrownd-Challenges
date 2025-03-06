@@ -3,10 +3,10 @@
 public class StudentAnswerDto (int studentId, int examId, int answerKeyId, List<int[]> answers)
 {
     public int Id { get; set; }
-    public int StudentId { get; set; } = studentId;
-    public int ExamId { get; set; } = examId;
-    public int AnswerKeyId { get; set; } = answerKeyId;
-    public List<int[]> Answers { get; set; } = answers;
+    public int StudentId { get; } = studentId;
+    public int ExamId { get; } = examId;
+    public int AnswerKeyId { get; } = answerKeyId;
+    public List<int[]> Answers { get; } = answers;
     public Dictionary<int, char>? ConvertedAnswers { get; set; }
     
     public double Grade { get; set; }
