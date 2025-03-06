@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using LeituraOtica.Dtos;
+﻿using LeituraOtica.Dtos;
 using LeituraOtica.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 

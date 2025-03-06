@@ -1,7 +1,4 @@
-﻿using FluentValidation.Results;
-using LeituraOtica.Dtos;
-
-namespace LeituraOtica.Responses;
+﻿namespace LeituraOtica.Responses;
 
 public class OperationResult(bool isSuccess, string? errorMessage = null, object? data = null)
 {
