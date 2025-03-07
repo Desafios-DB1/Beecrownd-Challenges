@@ -47,7 +47,7 @@ public class AnswerKeyControllerTest
         
         //Assert
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(badRequestResult.StatusCode, 400);
+        Assert.Equal(400, badRequestResult.Value);
         Assert.Equal("Erro ao salvar o gabarito!", badRequestResult.Value);
     }
 
