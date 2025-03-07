@@ -1,16 +1,19 @@
 ﻿using FluentValidation;
+using LeituraOtica.Constants;
 using LeituraOtica.Dtos;
+using LeituraOtica.Interfaces.Services;
 
 namespace LeituraOtica.Validators;
 
 public class AnswerKeyDtoValidator : AbstractValidator<AnswerKeyDto>
 {
-    public AnswerKeyDtoValidator()
+    public AnswerKeyDtoValidator(IExamService examService)
     {
         RuleFor(x => x.ExamId)
-            .NotEmpty().WithMessage("O id da prova não pode estar vazio!");
+            .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "ExamId"))
+            .Must(examService.ExamExists).WithMessage(string.Format(ValidationMessages.NotExistError, "ExamId"));
         
         RuleFor(x => x.Answers)
-            .NotEmpty().WithMessage("A lista de respostas não pode estar vazia!");
+            .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "Answers"));
     }
 }
