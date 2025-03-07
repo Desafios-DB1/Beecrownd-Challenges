@@ -4,5 +4,5 @@ namespace LeituraOtica.Interfaces.Services;
 
 public interface IExamCorrectionService
 {
-    double Correction(StudentAnswerDto input);
+    double Correction(StudentAnswerWithGradeDto studentAnswerWithGrade);
 }
