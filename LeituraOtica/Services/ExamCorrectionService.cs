@@ -13,7 +13,9 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
         if (correctAnswers == null || studentAnswers == null)
             return 0;
 
-        var studentCorrectAnswers = correctAnswers.Count(answer => answer.Value == studentAnswers![answer.Key]);
+        var studentCorrectAnswers = correctAnswers.Count(a =>
+            studentAnswers.TryGetValue(a.Key, out var studentAnswer) &&
+            studentAnswer == a.Value);
 
         var exam = examService.GetExam(input.ExamId);
         var examValue = exam!.Value;
