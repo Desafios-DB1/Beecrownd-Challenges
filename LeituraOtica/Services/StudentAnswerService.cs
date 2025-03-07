@@ -18,7 +18,7 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
         var validationResult = studentAnswerValidator.Validate(answer);
         if (!validationResult.IsValid)
         {
-            return OperationResult.Failure(validationResult.Errors.FirstOrDefault()?.ToString());
+            return OperationResult.Failure(validationResult.Errors.ToString());
         }
 
         var exam = examService.GetExam(answer.ExamId);
