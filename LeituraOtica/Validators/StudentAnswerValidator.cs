@@ -1,23 +1,27 @@
 ﻿using FluentValidation;
+using LeituraOtica.Constants;
 using LeituraOtica.Dtos;
+using LeituraOtica.Interfaces.Services;
 
 namespace LeituraOtica.Validators;
 
 public class StudentAnswerDtoValidator : AbstractValidator<StudentAnswerDto>
 {
-    public StudentAnswerDtoValidator()
+    public StudentAnswerDtoValidator(IExamService examService, IAnswerKeyService answerKeyService)
     {
         RuleFor(x => x.StudentId)
-            .NotEmpty().WithMessage("O id do estudante é obrigatorio");
-        
+            .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "StudentId"));
+
         RuleFor(x => x.ExamId)
-            .NotEmpty().WithMessage("O id da prova é obrigatorio");
+            .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "ExamId"))
+            .Must(examService.ExamExists).WithMessage(string.Format(ValidationMessages.NotExistError, "ExamID"));
 
         RuleFor(x => x.AnswerKeyId)
-            .NotEmpty().WithMessage("O id do gabarito é obrigatório!");
+            .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "AnswerKeyId"))
+            .Must(answerKeyService.AnswerKeyExists).WithMessage(string.Format(ValidationMessages.NotExistError, "AnswerKeyId"));
         
         RuleFor(x => x.Answers)
-            .NotEmpty().WithMessage("A lista de respostas é obrigatoria");
+            .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "Answers"));
 
         RuleForEach(x => x.Answers)
             .Must(answ => answ is { Length: 5 })
