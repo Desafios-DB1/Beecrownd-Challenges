@@ -6,7 +6,7 @@ namespace LeituraOtica.Repositories;
 public class ExamRepository : IExamRepository
 {
     private static readonly List<ExamDto> Exams = [];
-    private static int _currentId;
+    private int _currentId;
 
     public ExamDto Add(ExamDto exam)
     {

@@ -6,7 +6,7 @@ namespace LeituraOtica.Repositories;
 public class StudentAnswerRepository : IStudentAnswerRepository
 {
     private static readonly List<StudentAnswerDto> StudentAnswers = [];
-    private static int _currentId;
+    private int _currentId;
     
     public StudentAnswerDto Add(StudentAnswerDto answer)
     {
