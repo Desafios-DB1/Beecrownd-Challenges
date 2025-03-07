@@ -4,7 +4,7 @@ namespace LeituraOtica.Interfaces.Repositories;
 
 public interface IStudentAnswerRepository
 {
-    StudentAnswerDto Add(StudentAnswerDto answer);
-    StudentAnswerDto? GetById(int id);
-    List<StudentAnswerDto>? GetAll();
+    StudentAnswerWithGradeDto Add(StudentAnswerWithGradeDto answer);
+    StudentAnswerWithGradeDto? GetById(int id);
+    List<StudentAnswerWithGradeDto>? GetAll();
 }
