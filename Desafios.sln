@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1129", "1129", "{0E41C1E9-C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeituraOtica", "LeituraOtica\LeituraOtica.csproj", "{FE160D67-6141-498E-A6A5-3965F345C399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeituraOticaTest", "LeituraOticaTest\LeituraOticaTest.csproj", "{C2206740-4DAC-4826-B98A-6DAAC1D7E54B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeituraOtica.Test", "LeituraOtica.Test\LeituraOtica.Test.csproj", "{C2206740-4DAC-4826-B98A-6DAAC1D7E54B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

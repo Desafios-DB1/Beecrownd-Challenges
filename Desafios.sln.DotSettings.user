@@ -1,23 +1,12 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AIValidator_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003Fc765e47ec58cf89220cd5779fc5cce70b01abab88edf4ed2b5deaba1244c610_003FIValidator_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ANotNullException_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F8616f46143d72d2d7df7a28a67d3d3f45af58d699dfbe3af8d3f1e5e4dedcc81_003FNotNullException_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=103afa7d_002Dcc4a_002D40a6_002Da2e8_002D78238f522398/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;1000 - HelloWorld.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Or&gt;&#xD;
-    &lt;Project Location="C:\Users\lucas.goncalves\RiderProjects\Desafios\HelloWorld.Tests" Presentation="&amp;lt;1000&amp;gt;\&amp;lt;HelloWorld.Tests&amp;gt;" /&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;xUnit::39F38308-19FA-4813-A1FB-92654D1E7B55::net9.0::ExtremelyBasic.Tests.SumControllerTests.PostNumbers_ShouldReturnSuccessMessage_WhenValuesAreStored&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::EC51001B-CE73-4992-B058-50E8E96F7276::net9.0::IdentificandoChaTest.ChallengeControllerTest.GetChallenge_ReturnOk_WithSuccessMessage&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::EC51001B-CE73-4992-B058-50E8E96F7276::net9.0::IdentificandoChaTest.ChallengeControllerTest&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::EC51001B-CE73-4992-B058-50E8E96F7276::net9.0::IdentificandoChaTest.ContestantControllerTest&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::EC51001B-CE73-4992-B058-50E8E96F7276::net9.0::IdentificandoChaTest.Controllers.ChallengeControllerTest.PostChallengeAnswers_ReturnsOk_WhenAllContestantsAnswered&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::EC51001B-CE73-4992-B058-50E8E96F7276::net9.0::IdentificandoChaTest.Controllers.ChallengeControllerTest.PostChallengeAnswers_ReturnsBadRequest_WhenNoContestantsAnswered&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Controllers.AnswerKeyControllerTest.SaveAnswerKey_ReturnsOk_WhenSuccess&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Controllers.AnswerKeyControllerTest.SaveAnswerKey_ReturnsBadRequest_WhenFail&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Controllers.AnswerKeyControllerTest.GetAnswerKeys_ReturnsOk_WhenSuccess&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-    &lt;Project Location="C:\Users\lucas.goncalves\RiderProjects\Desafios\ExtremelyBasic.Tests" Presentation="&amp;lt;1001&amp;gt;\&amp;lt;ExtremelyBasic.Tests&amp;gt;" /&gt;&#xD;
-    &lt;Project Location="C:\Users\lucas.goncalves\RiderProjects\Desafios\ExtremelyBasicTests" Presentation="&amp;lt;1001&amp;gt;\&amp;lt;ExtremelyBasicTests&amp;gt;" /&gt;&#xD;
-    &lt;Project Location="C:\Users\lucas.goncalves\RiderProjects\Desafios\IdentificandoCha.Test" Presentation="&amp;lt;2006&amp;gt;\&amp;lt;IdentificandoCha.Test&amp;gt;" /&gt;&#xD;
-    &lt;ProjectFolder&gt;C2206740-4DAC-4826-B98A-6DAAC1D7E54B/d:Controllers&lt;/ProjectFolder&gt;&#xD;
-  &lt;/Or&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ba471ab2_002Dc957_002D47a5_002Dae2c_002D4d989247f7bc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SaveAnswerKey_ReturnFailure_WhenExamDoesNotExist" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Services.AnswerKeyServiceTest.SaveAnswerKey_ReturnFailure_WhenExamDoesNotExist&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Services.AnswerKeyServiceTest.SaveAnswerKey_ReturnFailure_WhenValidationFails&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::C2206740-4DAC-4826-B98A-6DAAC1D7E54B::net9.0::LeituraOpticaTest.Services.AnswerKeyServiceTest.SaveAnswerKey_ReturnSuccess_WhenValidationPasses&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	</wpf:ResourceDictionary>
