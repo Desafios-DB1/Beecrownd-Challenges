@@ -10,7 +10,7 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
         var studentAnswers = input.ConvertedAnswers;
         var correctAnswers = answerKeyService.GetAnswerKey(input.AnswerKeyId)?.Answers;
 
-        if (correctAnswers == null)
+        if (correctAnswers == null || studentAnswers == null)
             return 0;
 
         var studentCorrectAnswers = correctAnswers.Count(answer => answer.Value == studentAnswers![answer.Key]);
