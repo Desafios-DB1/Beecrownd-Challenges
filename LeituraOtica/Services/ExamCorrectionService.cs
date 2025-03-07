@@ -18,7 +18,9 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
             studentAnswer == a.Value);
 
         var exam = examService.GetExam(input.ExamId);
-        var examValue = exam!.Value;
+        if (exam == null)
+            return 0;
+        var examValue = exam.Value;
         var totalQuestions = correctAnswers.Count;
         
         var questionValue = examValue / totalQuestions;
