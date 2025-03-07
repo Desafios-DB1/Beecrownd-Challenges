@@ -4,28 +4,34 @@ namespace LeituraOtica.Services;
 
 public class OpticalConversionService : IOpticalConversionService
 {
-    private readonly char[] _answers = ['A', 'B', 'C', 'D', 'E'];
-    public Dictionary<int, char>? ConvertAnswersToLetters(List<int[]> answers)
+    private readonly char[] _letters = ['A', 'B', 'C', 'D', 'E'];
+    public Dictionary<int, char> ConvertNumbersToLetters(List<int[]> answers)
     {
         var result = answers.Select((answer, index) =>
             {
-                var countBelow127 = answer.Count(value => value <= 127);
-
-                if (countBelow127 > 1)
+                if (MoreThanOneValueBelow127(answer))
                 {
                     return new KeyValuePair<int, char>(index + 1, '*');
                 }
-                
-                var minValueIndex = Array.IndexOf(answer, answer.Min());
+
+                var minValueIndex = GetMinValueIndex(answer);
 
                 return new KeyValuePair<int, char>(
                     index + 1,
-                    minValueIndex >= 0 && minValueIndex < _answers.Length
-                        ? _answers[minValueIndex]
-                        : '*');
+                    _letters[minValueIndex]);
             })
             .ToDictionary(x => x.Key, x => x.Value);
-        
+
         return result;
+    }
+
+    private static bool MoreThanOneValueBelow127(int[] values)
+    {
+        return values.Count(value => value <= 127) > 1;
+    }
+
+    private static int GetMinValueIndex(int[] values)
+    {
+        return Array.IndexOf(values, values.Min());
     }
 }
