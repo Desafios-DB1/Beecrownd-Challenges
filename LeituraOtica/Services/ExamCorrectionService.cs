@@ -27,7 +27,6 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
         var grade = questionValue * studentCorrectAnswers;
         var roundedGrade = Math.Round(grade, 2);
         
-        input.Grade = roundedGrade;
         return roundedGrade;
     }
 }
