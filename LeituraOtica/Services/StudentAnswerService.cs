@@ -33,7 +33,7 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
             return OperationResult.Failure("Gabarito não encontrado!");
         }
 
-        answer.ConvertedAnswers = opticalConversionService.ConvertAnswersToLetters(answer.Answers);
+        answer.ConvertedAnswers = opticalConversionService.ConvertNumbersToLetters(answer.Answers);
         
         answer.Grade = examCorrectionService.Correction(answer);
         
