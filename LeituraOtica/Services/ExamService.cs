@@ -7,17 +7,14 @@ using LeituraOtica.Responses;
 
 namespace LeituraOtica.Services;
 
-public class ExamService(IExamRepository examRepository,
-    IValidator<ExamDto> examValidator) : IExamService
+public class ExamService(IExamRepository examRepository, 
+    IValidationService validationService) : IExamService
 {
     public OperationResult AddExam(ExamDto exam)
     {
-        var validation = Validate(exam);
-        
-        if (!validation.IsValid)
-        {
-            return OperationResult.Failure(validation.Errors.ToString());
-        }
+        var examValidation = validationService.Validate(exam);
+        if (!examValidation.IsSuccess)
+            return examValidation;
         
         examRepository.Add(exam);
         return OperationResult.Success(exam);
@@ -32,12 +29,6 @@ public class ExamService(IExamRepository examRepository,
     public ExamDto? GetExam(int examId)
     {
         return examRepository.GetById(examId);
-    }
-
-    private ValidationResult Validate(ExamDto exam)
-    {
-        var validationResult = examValidator.Validate(exam);
-        return validationResult.IsValid ? new ValidationResult() : validationResult;
     }
     
     public bool ExamExists(int examId)
