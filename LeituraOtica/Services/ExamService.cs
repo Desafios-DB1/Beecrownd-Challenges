@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using LeituraOtica.Dtos;
 using LeituraOtica.Interfaces.Repositories;
 using LeituraOtica.Interfaces.Services;
@@ -11,22 +12,43 @@ public class ExamService(IExamRepository examRepository,
 {
     public OperationResult AddExam(ExamDto exam)
     {
-        var validationResult = examValidator.Validate(exam);
-        if (!validationResult.IsValid)
+        var validation = Validate(exam);
+        
+        if (!validation.IsValid)
         {
-            return OperationResult.Failure(validationResult.Errors.FirstOrDefault()?.ToString());
+            return OperationResult.Failure(validation.Errors.ToString());
         }
+        
         examRepository.Add(exam);
         return OperationResult.Success(exam);
     }
 
-    public List<ExamDto>? GetAllExams()
+    public List<ExamDto> GetAllExams()
     {
-        return examRepository.GetAll();
+        var exams = examRepository.GetAll();
+        return exams ?? [];
     }
 
     public ExamDto? GetExam(int examId)
     {
         return examRepository.GetById(examId);
+    }
+
+    private ValidationResult Validate(ExamDto exam)
+    {
+        var validationResult = examValidator.Validate(exam);
+        return validationResult.IsValid ? new ValidationResult() : validationResult;
+    }
+    
+    public bool ExamExists(int examId)
+    {
+        var exam = GetExam(examId);
+        return exam != null;
+    }
+
+    public double GetExamValue(int examId)
+    {
+        var exam = GetExam(examId);
+        return exam?.Value ?? 0;
     }
 }
