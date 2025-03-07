@@ -5,9 +5,9 @@ namespace LeituraOtica.Services;
 public class OpticalConversionService : IOpticalConversionService
 {
     private readonly char[] _letters = ['A', 'B', 'C', 'D', 'E'];
-    public Dictionary<int, char> ConvertNumbersToLetters(List<int[]> answers)
+    public Dictionary<int, char> ConvertNumbersToLetters(List<int[]> studentAnswersInNumbers)
     {
-        var result = answers.Select((answer, index) =>
+        var result = studentAnswersInNumbers.Select((answer, index) =>
             {
                 if (MoreThanOneValueBelow127(answer))
                 {

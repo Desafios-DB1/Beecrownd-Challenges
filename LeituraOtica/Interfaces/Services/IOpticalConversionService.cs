@@ -2,5 +2,5 @@
 
 public interface IOpticalConversionService
 {
-    Dictionary<int, char> ConvertNumbersToLetters(List<int[]> answers);
+    Dictionary<int, char> ConvertNumbersToLetters(List<int[]> studentAnswersInNumbers);
 }
