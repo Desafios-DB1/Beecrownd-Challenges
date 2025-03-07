@@ -1,4 +1,5 @@
-﻿using LeituraOtica.Dtos;
+﻿using FluentValidation.Results;
+using LeituraOtica.Dtos;
 using LeituraOtica.Responses;
 
 namespace LeituraOtica.Interfaces.Services;
