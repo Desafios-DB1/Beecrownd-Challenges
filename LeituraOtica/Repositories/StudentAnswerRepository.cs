@@ -5,22 +5,22 @@ namespace LeituraOtica.Repositories;
 
 public class StudentAnswerRepository : IStudentAnswerRepository
 {
-    private static readonly List<StudentAnswerDto> StudentAnswers = [];
-    private static int _currentId;
+    private static readonly List<StudentAnswerWithGradeDto> StudentAnswers = [];
+    private int _currentId;
     
-    public StudentAnswerDto Add(StudentAnswerDto answer)
+    public StudentAnswerWithGradeDto Add(StudentAnswerWithGradeDto answer)
     {
         answer.Id = ++_currentId;
         StudentAnswers.Add(answer);
         return answer;
     }
 
-    public StudentAnswerDto? GetById(int id)
+    public StudentAnswerWithGradeDto? GetById(int id)
     {
         return StudentAnswers.FirstOrDefault(x => x.Id == id);
     }
 
-    public List<StudentAnswerDto>? GetAll()
+    public List<StudentAnswerWithGradeDto>? GetAll()
     {
         return StudentAnswers;
     }
