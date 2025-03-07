@@ -37,4 +37,15 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
     {
         return answerKeyRepository.GetAll();
     }
+
+    public Dictionary<int, char>? GetAnswerKeyAnswers(int answerKeyId)
+    {
+        return answerKeyRepository.GetById(answerKeyId)?.Answers;
+    }
+
+    public int GetTotalQuestions(int answerKeyId)
+    {
+        var answerKeyAnswers = GetAnswerKeyAnswers(answerKeyId);
+        return answerKeyAnswers?.Count ?? 0;
+    }
 }
