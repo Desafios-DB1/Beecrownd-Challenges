@@ -1,24 +1,25 @@
 ﻿using FluentValidation;
 using LeituraOtica.Constants;
 using LeituraOtica.Dtos;
+using LeituraOtica.Interfaces.Repositories;
 using LeituraOtica.Interfaces.Services;
 
 namespace LeituraOtica.Validators;
 
 public class StudentAnswerDtoValidator : AbstractValidator<StudentAnswerDto>
 {
-    public StudentAnswerDtoValidator(IExamService examService, IAnswerKeyService answerKeyService)
+    public StudentAnswerDtoValidator(IExamRepository examRepository, IAnswerKeyRepository answerKeyRepository)
     {
         RuleFor(x => x.StudentId)
             .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "StudentId"));
 
         RuleFor(x => x.ExamId)
             .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "ExamId"))
-            .Must(examService.ExamExists).WithMessage(string.Format(ValidationMessages.NotExistError, "ExamID"));
+            .Must(examRepository.Exists).WithMessage(string.Format(ValidationMessages.NotExistError, "ExamID"));
 
         RuleFor(x => x.AnswerKeyId)
             .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "AnswerKeyId"))
-            .Must(answerKeyService.AnswerKeyExists).WithMessage(string.Format(ValidationMessages.NotExistError, "AnswerKeyId"));
+            .Must(answerKeyRepository.Exists).WithMessage(string.Format(ValidationMessages.NotExistError, "AnswerKeyId"));
         
         RuleFor(x => x.Answers)
             .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "Answers"));
