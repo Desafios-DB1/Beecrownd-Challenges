@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using LeituraOtica.Dtos;
+﻿using LeituraOtica.Dtos;
 using LeituraOtica.Interfaces.Repositories;
 using LeituraOtica.Interfaces.Services;
 using LeituraOtica.Responses;
@@ -7,47 +6,48 @@ using LeituraOtica.Responses;
 namespace LeituraOtica.Services;
 
 public class StudentAnswerService (IStudentAnswerRepository studentAnswerRepository, 
-    IValidator<StudentAnswerDto> studentAnswerValidator,
+    IValidationService validationService,
     IExamCorrectionService examCorrectionService,
-    IExamService examService,
-    IAnswerKeyService answerKeyService,
     IOpticalConversionService opticalConversionService) : IStudentAnswerService
 {
-    public OperationResult AddStudentAnswer(StudentAnswerDto answer)
+    public OperationResult AddStudentAnswer(StudentAnswerDto studentAnswer)
     {
-        var validationResult = studentAnswerValidator.Validate(answer);
-        if (!validationResult.IsValid)
-        {
-            return OperationResult.Failure(validationResult.Errors.ToString());
-        }
+        var studentAnswerValidation = validationService.Validate(studentAnswer);
+        if (!studentAnswerValidation.IsSuccess)
+            return studentAnswerValidation;
 
-        var exam = examService.GetExam(answer.ExamId);
-        if (exam == null)
-        {
-            return OperationResult.Failure("Prova não encontrada!");
-        }
-
-        var answerKey = answerKeyService.GetAnswerKey(answer.AnswerKeyId);
-        if (answerKey == null || answerKey.ExamId != answer.ExamId)
-        {
-            return OperationResult.Failure("Gabarito não encontrado!");
-        }
-
-        answer.ConvertedAnswers = opticalConversionService.ConvertNumbersToLetters(answer.Answers);
+        var studentAnswerWithGrade = new StudentAnswerWithGradeDto(
+            studentAnswer.StudentId,
+            studentAnswer.ExamId,
+            studentAnswer.AnswerKeyId,
+            GetFormattedAnswers(studentAnswer.Answers));
         
-        answer.Grade = examCorrectionService.Correction(answer);
+        studentAnswerWithGrade.Grade = GetGrade(studentAnswerWithGrade);
         
-        studentAnswerRepository.Add(answer);
-        return OperationResult.Success(answer);
+        studentAnswerRepository.Add(studentAnswerWithGrade);
+        return OperationResult.Success(studentAnswerWithGrade);
     }
 
-    public StudentAnswerDto? GetStudentAnswerById(int id)
+    public StudentAnswerWithGradeDto? GetStudentAnswerById(int id)
     {
         return studentAnswerRepository.GetById(id);
     }
 
-    public List<StudentAnswerDto>? GetAllStudentsAnswers()
+    public List<StudentAnswerWithGradeDto> GetAllStudentsAnswers()
     {
-        return studentAnswerRepository.GetAll();
+        var studentsAnswers = studentAnswerRepository.GetAll();
+        return studentsAnswers ?? [];
+    }
+
+    private Dictionary<int, char> GetFormattedAnswers(List<int[]> answers)
+    {
+        var formattedAnswers = opticalConversionService.ConvertNumbersToLetters(answers);
+        return formattedAnswers;
+    }
+
+    private double GetGrade(StudentAnswerWithGradeDto studentAnswer)
+    {
+        var grade = examCorrectionService.Correction(studentAnswer);
+        return grade;
     }
 }
