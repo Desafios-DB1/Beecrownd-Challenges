@@ -6,7 +6,7 @@ namespace LeituraOtica.Repositories;
 public class AnswerKeyRepository : IAnswerKeyRepository
 {
     private static readonly List<AnswerKeyDto> AnswersKeys = [];
-    private static int _currentId;
+    private int _currentId;
     
     public AnswerKeyDto Save(AnswerKeyDto answerKey)
     {
@@ -33,5 +33,10 @@ public class AnswerKeyRepository : IAnswerKeyRepository
     public AnswerKeyDto? GetByExamAndKeyId(int examId, int keyId)
     {
         return AnswersKeys.FirstOrDefault(ak => ak.Id == keyId && ak.ExamId == examId);
+    }
+
+    public bool Exists(int answerKeyId)
+    {
+        return AnswersKeys.Any(ak => ak.Id == answerKeyId);
     }
 }
