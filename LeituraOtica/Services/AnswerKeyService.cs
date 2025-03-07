@@ -7,22 +7,14 @@ using LeituraOtica.Responses;
 namespace LeituraOtica.Services;
 
 public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
-    IValidator<AnswerKeyDto> answerKeyValidator,
+    IValidationService validationService,
     IExamService examService) : IAnswerKeyService
 {
     public OperationResult SaveAnswerKey(AnswerKeyDto answerKey)
     {
-        var validationResult = answerKeyValidator.Validate(answerKey);
-        if (!validationResult.IsValid)
-        { 
-            return OperationResult.Failure(validationResult.Errors.FirstOrDefault()?.ToString());
-        }
-        
-        var exam = examService.GetExam(answerKey.ExamId);
-        if (exam == null)
-        {
-            return OperationResult.Failure("A prova não existe!");
-        }
+        var answerKeyValidation = validationService.Validate(answerKey);
+        if (!answerKeyValidation.IsSuccess)
+            return answerKeyValidation;
         
         answerKeyRepository.Save(answerKey);
         return OperationResult.Success(answerKey);
@@ -47,5 +39,11 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
     {
         var answerKeyAnswers = GetAnswerKeyAnswers(answerKeyId);
         return answerKeyAnswers?.Count ?? 0;
+    }
+
+    public bool AnswerKeyExists(int answerKeyId)
+    {
+        var answerKey = GetAnswerKey(answerKeyId);
+        return answerKey != null;
     }
 }
