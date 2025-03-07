@@ -7,26 +7,41 @@ public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamServ
 {
     public double Correction(StudentAnswerDto input)
     {
+        var examId = input.ExamId;
+        var answerKeyId = input.AnswerKeyId;
+        
+        if (!examService.ExamExists(examId))
+            return 0;
+        
         var studentAnswers = input.ConvertedAnswers;
-        var correctAnswers = answerKeyService.GetAnswerKey(input.AnswerKeyId)?.Answers;
+        var answerKeyAnswers = answerKeyService.GetAnswerKeyAnswers(answerKeyId);
 
-        if (correctAnswers == null || studentAnswers == null)
+        if (answerKeyAnswers == null || studentAnswers == null)
             return 0;
 
-        var studentCorrectAnswers = correctAnswers.Count(a =>
+        var studentCorrectAnswers = answerKeyAnswers.Count(a =>
             studentAnswers.TryGetValue(a.Key, out var studentAnswer) &&
             studentAnswer == a.Value);
 
-        var exam = examService.GetExam(input.ExamId);
-        if (exam == null)
-            return 0;
-        var examValue = exam.Value;
-        var totalQuestions = correctAnswers.Count;
+        var examValue = examService.GetExamValue(examId);
+        var totalQuestions = answerKeyService.GetTotalQuestions(answerKeyId);
+        var questionValue = CalcQuestionValue(totalQuestions, examValue);
         
-        var questionValue = examValue / totalQuestions;
-        var grade = questionValue * studentCorrectAnswers;
-        var roundedGrade = Math.Round(grade, 2);
+        var grade = CalcRoundedGrade(studentCorrectAnswers, questionValue);
         
-        return roundedGrade;
+        return grade;
     }
+
+    private static double CalcRoundedGrade(int correctAnswers, double questionValue)
+    {
+        var grade = correctAnswers * questionValue;
+        return Math.Round(grade, 2);
+    }
+
+    private static double CalcQuestionValue(int totalQuestions, double examValue)
+    {
+        var questionValue = examValue / totalQuestions;
+        return questionValue;
+    }
+    
 }
