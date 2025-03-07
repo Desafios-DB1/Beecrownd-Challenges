@@ -5,15 +5,15 @@ namespace LeituraOtica.Services;
 
 public class ExamCorrectionService(IAnswerKeyService answerKeyService, IExamService examService) : IExamCorrectionService
 {
-    public double Correction(StudentAnswerDto input)
+    public double Correction(StudentAnswerWithGradeDto studentAnswerWithGrade)
     {
-        var examId = input.ExamId;
-        var answerKeyId = input.AnswerKeyId;
+        var examId = studentAnswerWithGrade.ExamId;
+        var answerKeyId = studentAnswerWithGrade.AnswerKeyId;
         
         if (!examService.ExamExists(examId))
             return 0;
         
-        var studentAnswers = input.ConvertedAnswers;
+        var studentAnswers = studentAnswerWithGrade.Answers;
         var answerKeyAnswers = answerKeyService.GetAnswerKeyAnswers(answerKeyId);
 
         if (answerKeyAnswers == null || studentAnswers == null)
