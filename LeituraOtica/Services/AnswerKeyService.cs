@@ -7,8 +7,7 @@ using LeituraOtica.Responses;
 namespace LeituraOtica.Services;
 
 public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
-    IValidationService validationService,
-    IExamService examService) : IAnswerKeyService
+    IValidationService validationService) : IAnswerKeyService
 {
     public OperationResult SaveAnswerKey(AnswerKeyDto answerKey)
     {
@@ -16,8 +15,8 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
         if (!answerKeyValidation.IsSuccess)
             return answerKeyValidation;
         
-        answerKeyRepository.Save(answerKey);
-        return OperationResult.Success(answerKey);
+        var newAnswerKey = answerKeyRepository.Save(answerKey);
+        return OperationResult.Success(newAnswerKey);
     }
 
     public AnswerKeyDto? GetAnswerKey(Guid answerKeyId)
@@ -39,11 +38,5 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
     {
         var answerKeyAnswers = GetAnswerKeyAnswers(answerKeyId);
         return answerKeyAnswers?.Count ?? 0;
-    }
-
-    public bool AnswerKeyExists(Guid answerKeyId)
-    {
-        var answerKey = GetAnswerKey(answerKeyId);
-        return answerKey != null;
     }
 }

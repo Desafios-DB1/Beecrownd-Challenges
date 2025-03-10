@@ -13,6 +13,6 @@ public class OperationResult(bool isSuccess, string? errorMessage = null, object
 
     public static OperationResult Failure(string? errorMessage = null)
     {
-        return new OperationResult(false, errorMessage, null);
+        return new OperationResult(false, errorMessage);
     }
 }

@@ -23,8 +23,8 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
         
         studentAnswerWithGrade.Grade = GetGrade(studentAnswerWithGrade);
         
-        studentAnswerRepository.Add(studentAnswerWithGrade);
-        return OperationResult.Success(studentAnswerWithGrade);
+        var newStudentAnswer = studentAnswerRepository.Add(studentAnswerWithGrade);
+        return OperationResult.Success(newStudentAnswer);
     }
 
     public StudentAnswerWithGradeDto? GetStudentAnswerById(Guid id)

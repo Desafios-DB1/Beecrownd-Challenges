@@ -28,17 +28,4 @@ public class ExamRepository : IExamRepository
     {
         return Exams;
     }
-    
-    public bool DeleteById(Guid id)
-    {
-        var exam = GetById(id);
-        
-        if (exam == null)
-        {
-            return false;
-        }
-        
-        Exams.Remove(exam);
-        return true;
-    }
 }

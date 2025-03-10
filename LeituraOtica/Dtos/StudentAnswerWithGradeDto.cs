@@ -5,7 +5,7 @@ public class StudentAnswerWithGradeDto (Guid examId, Guid answerKeyId, Dictionar
     public Guid Id { get; set; }
     public Guid ExamId { get; } = examId;
     public Guid AnswerKeyId { get; } = answerKeyId;
-    public Dictionary<int, char>? Answers { get; set; } = answers;
+    public Dictionary<int, char>? Answers { get; } = answers;
     
     public double Grade { get; set; }
 }

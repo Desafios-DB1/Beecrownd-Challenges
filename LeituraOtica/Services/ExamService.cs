@@ -16,8 +16,8 @@ public class ExamService(IExamRepository examRepository,
         if (!examValidation.IsSuccess)
             return examValidation;
         
-        examRepository.Add(exam);
-        return OperationResult.Success(exam);
+        var newExam = examRepository.Add(exam);
+        return OperationResult.Success(newExam);
     }
 
     public List<ExamDto> GetAllExams()

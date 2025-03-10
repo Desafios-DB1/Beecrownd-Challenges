@@ -10,5 +10,4 @@ public interface IAnswerKeyService
     public List<AnswerKeyDto>? GetAllAnswerKeys();
     Dictionary<int, char>? GetAnswerKeyAnswers(Guid answerKeyId);
     int GetTotalQuestions(Guid answerKeyId);
-    bool AnswerKeyExists(Guid answerKeyId);
 }
