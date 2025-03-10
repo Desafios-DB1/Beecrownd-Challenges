@@ -5,9 +5,9 @@ namespace LeituraOtica.Interfaces.Repositories;
 public interface IAnswerKeyRepository
 {
     public AnswerKeyDto Save(AnswerKeyDto answerKey);
-    public AnswerKeyDto? GetById(int answerKeyId);
-    public List<AnswerKeyDto>? GetByExamId(int examId);
+    public AnswerKeyDto? GetById(Guid answerKeyId);
+    public List<AnswerKeyDto>? GetByExamId(Guid examId);
     public List<AnswerKeyDto>? GetAll();
-    public AnswerKeyDto? GetByExamAndKeyId(int examId, int keyId);
-    bool Exists(int answerKeyId);
+    public AnswerKeyDto? GetByExamAndKeyId(Guid examId, Guid keyId);
+    bool Exists(Guid answerKeyId);
 }

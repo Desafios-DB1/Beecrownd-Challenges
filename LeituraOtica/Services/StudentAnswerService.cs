@@ -17,7 +17,6 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
             return studentAnswerValidation;
 
         var studentAnswerWithGrade = new StudentAnswerWithGradeDto(
-            studentAnswer.StudentId,
             studentAnswer.ExamId,
             studentAnswer.AnswerKeyId,
             GetFormattedAnswers(studentAnswer.Answers));
@@ -28,7 +27,7 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
         return OperationResult.Success(studentAnswerWithGrade);
     }
 
-    public StudentAnswerWithGradeDto? GetStudentAnswerById(int id)
+    public StudentAnswerWithGradeDto? GetStudentAnswerById(Guid id)
     {
         return studentAnswerRepository.GetById(id);
     }

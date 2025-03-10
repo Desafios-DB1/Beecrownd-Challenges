@@ -32,8 +32,8 @@ public class StudentAnswerController(IStudentAnswerService studentAnswerService)
     }
 
     [HttpGet]
-    [Route("{id:int}")]
-    public IActionResult GetStudentAnswerById(int id)
+    [Route("{id:Guid}")]
+    public IActionResult GetStudentAnswerById(Guid id)
     {
         var result = studentAnswerService.GetStudentAnswerById(id);
         

@@ -20,7 +20,7 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
         return OperationResult.Success(answerKey);
     }
 
-    public AnswerKeyDto? GetAnswerKey(int answerKeyId)
+    public AnswerKeyDto? GetAnswerKey(Guid answerKeyId)
     {
         return answerKeyRepository.GetById(answerKeyId);
     }
@@ -30,18 +30,18 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
         return answerKeyRepository.GetAll();
     }
 
-    public Dictionary<int, char>? GetAnswerKeyAnswers(int answerKeyId)
+    public Dictionary<int, char>? GetAnswerKeyAnswers(Guid answerKeyId)
     {
         return answerKeyRepository.GetById(answerKeyId)?.Answers;
     }
 
-    public int GetTotalQuestions(int answerKeyId)
+    public int GetTotalQuestions(Guid answerKeyId)
     {
         var answerKeyAnswers = GetAnswerKeyAnswers(answerKeyId);
         return answerKeyAnswers?.Count ?? 0;
     }
 
-    public bool AnswerKeyExists(int answerKeyId)
+    public bool AnswerKeyExists(Guid answerKeyId)
     {
         var answerKey = GetAnswerKey(answerKeyId);
         return answerKey != null;

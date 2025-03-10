@@ -32,8 +32,8 @@ public class AnswerKeyController (IAnswerKeyService answerKeyService) : Controll
     }
 
     [HttpGet]
-    [Route("{answerKeyId:int}")]
-    public IActionResult GetAnswerKey(int answerKeyId)
+    [Route("{answerKeyId:Guid}")]
+    public IActionResult GetAnswerKey(Guid answerKeyId)
     {
         var result = answerKeyService.GetAnswerKey(answerKeyId);
         if (result == null) return NotFound("Gabarito não encontrado!");

@@ -6,16 +6,15 @@ namespace LeituraOtica.Repositories;
 public class StudentAnswerRepository : IStudentAnswerRepository
 {
     private static readonly List<StudentAnswerWithGradeDto> StudentAnswers = [];
-    private int _currentId;
     
     public StudentAnswerWithGradeDto Add(StudentAnswerWithGradeDto answer)
     {
-        answer.Id = ++_currentId;
+        answer.Id = Guid.NewGuid();
         StudentAnswers.Add(answer);
         return answer;
     }
 
-    public StudentAnswerWithGradeDto? GetById(int id)
+    public StudentAnswerWithGradeDto? GetById(Guid id)
     {
         return StudentAnswers.FirstOrDefault(x => x.Id == id);
     }

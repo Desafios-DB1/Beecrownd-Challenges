@@ -10,9 +10,6 @@ public class StudentAnswerDtoValidator : AbstractValidator<StudentAnswerDto>
 {
     public StudentAnswerDtoValidator(IExamRepository examRepository, IAnswerKeyRepository answerKeyRepository)
     {
-        RuleFor(x => x.StudentId)
-            .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "StudentId"));
-
         RuleFor(x => x.ExamId)
             .NotEmpty().WithMessage(string.Format(ValidationMessages.RequiredField, "ExamId"))
             .Must(examRepository.Exists).WithMessage(string.Format(ValidationMessages.NotExistError, "ExamID"));

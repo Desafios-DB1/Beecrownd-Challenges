@@ -4,9 +4,9 @@ namespace LeituraOtica.Interfaces.Repositories;
 
 public interface IExamRepository
 { 
-    ExamDto? GetById(int id);
+    ExamDto? GetById(Guid id);
     List<ExamDto>? GetAll();
-    bool DeleteById(int id);
+    bool DeleteById(Guid id);
     ExamDto Add(ExamDto exam);
-    bool Exists(int id);
+    bool Exists(Guid id);
 }

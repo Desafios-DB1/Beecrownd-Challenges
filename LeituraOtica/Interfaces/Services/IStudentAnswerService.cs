@@ -6,6 +6,6 @@ namespace LeituraOtica.Interfaces.Services;
 public interface IStudentAnswerService
 {
     OperationResult AddStudentAnswer(StudentAnswerDto studentAnswer);
-    StudentAnswerWithGradeDto? GetStudentAnswerById(int id);
+    StudentAnswerWithGradeDto? GetStudentAnswerById(Guid id);
     List<StudentAnswerWithGradeDto>? GetAllStudentsAnswers();
 }

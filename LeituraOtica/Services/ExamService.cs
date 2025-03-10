@@ -26,18 +26,18 @@ public class ExamService(IExamRepository examRepository,
         return exams ?? [];
     }
 
-    public ExamDto? GetExam(int examId)
+    public ExamDto? GetExam(Guid examId)
     {
         return examRepository.GetById(examId);
     }
     
-    public bool ExamExists(int examId)
+    public bool ExamExists(Guid examId)
     {
         var exam = GetExam(examId);
         return exam != null;
     }
 
-    public double GetExamValue(int examId)
+    public double GetExamValue(Guid examId)
     {
         var exam = GetExam(examId);
         return exam?.Value ?? 0;

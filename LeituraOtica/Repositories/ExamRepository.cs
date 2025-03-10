@@ -6,21 +6,20 @@ namespace LeituraOtica.Repositories;
 public class ExamRepository : IExamRepository
 {
     private static readonly List<ExamDto> Exams = [];
-    private int _currentId;
 
     public ExamDto Add(ExamDto exam)
     {
-        exam.Id = ++_currentId;
+        exam.Id = Guid.NewGuid();
         Exams.Add(exam);
         return exam;
     }
 
-    public bool Exists(int id)
+    public bool Exists(Guid id)
     {
         return Exams.Any(exam => exam.Id == id);
     }
 
-    public ExamDto? GetById(int id)
+    public ExamDto? GetById(Guid id)
     {
         return Exams.FirstOrDefault(exam => exam.Id == id);
     }
@@ -30,7 +29,7 @@ public class ExamRepository : IExamRepository
         return Exams;
     }
     
-    public bool DeleteById(int id)
+    public bool DeleteById(Guid id)
     {
         var exam = GetById(id);
         

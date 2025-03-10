@@ -30,8 +30,8 @@ public class ExamController(IExamService examService) : ControllerBase
     }
 
     [HttpGet]
-    [Route("{examId:int}")]
-    public IActionResult GetExam(int examId)
+    [Route("{examId:Guid}")]
+    public IActionResult GetExam(Guid examId)
     {
         var result = examService.GetExam(examId);
         if (result == null) return NotFound("Prova não encontrada!");
