@@ -22,7 +22,8 @@ public class AnswerKeyControllerTest
     public void SaveAnswerKey_ReturnsOk_WhenSuccess()
     {
         //Arrange
-        var answerKeyDto = new AnswerKeyDto(1, new Dictionary<int, char> { { 1, 'A' } });
+        var fixedGuid = Guid.NewGuid();
+        var answerKeyDto = new AnswerKeyDto(fixedGuid, new Dictionary<int, char> { { 1, 'A' } });
         var successResult = OperationResult.Success(answerKeyDto);
         _answerKeyService.Setup(x => x.SaveAnswerKey(answerKeyDto)).Returns(successResult);
 
@@ -38,7 +39,8 @@ public class AnswerKeyControllerTest
     public void SaveAnswerKey_ReturnsBadRequest_WhenFail()
     {
         //Arrange
-        var answerKeyDto = new AnswerKeyDto(1, new Dictionary<int, char>{{1, 'A'}});
+        var fixedGuid = Guid.NewGuid();
+        var answerKeyDto = new AnswerKeyDto(fixedGuid, new Dictionary<int, char>{{1, 'A'}});
         var failResult = OperationResult.Failure("Erro ao salvar o gabarito!");
         _answerKeyService.Setup(x => x.SaveAnswerKey(answerKeyDto)).Returns(failResult);
         
@@ -47,7 +49,6 @@ public class AnswerKeyControllerTest
         
         //Assert
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequestResult.Value);
         Assert.Equal("Erro ao salvar o gabarito!", badRequestResult.Value);
     }
 
@@ -55,9 +56,10 @@ public class AnswerKeyControllerTest
     public void GetAnswerKeys_ReturnsOk_WhenSuccess()
     {
         //Arrange
+        var fixedGuid = Guid.NewGuid();
         var answerKeys = new List<AnswerKeyDto>
         {
-            new(1, new Dictionary<int, char> { { 1, 'A' } })
+            new(fixedGuid, new Dictionary<int, char> { { 1, 'A' } })
         };
         _answerKeyService.Setup(x => x.GetAllAnswerKeys()).Returns(answerKeys);
         
@@ -86,7 +88,7 @@ public class AnswerKeyControllerTest
     public void GetAnswerKey_ReturnsOk_WhenSuccess()
     {
         //Arrange
-        const int answerKeyId = 1;
+        var answerKeyId = Guid.NewGuid();
         var answerKey = new AnswerKeyDto(answerKeyId, new Dictionary<int, char> { { 1, 'A' } });
         _answerKeyService.Setup(x => x.GetAnswerKey(answerKeyId)).Returns(answerKey);
         
@@ -102,7 +104,7 @@ public class AnswerKeyControllerTest
     public void GetAnswerKey_ReturnsNotFound_WhenFail()
     {
         //Arrange
-        const int answerKeyId = 1;
+        var answerKeyId = Guid.NewGuid();
         _answerKeyService.Setup(x => x.GetAnswerKey(answerKeyId)).Returns((AnswerKeyDto?)null);
      
         //Act

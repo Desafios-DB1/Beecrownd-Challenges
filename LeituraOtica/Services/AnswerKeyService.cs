@@ -24,9 +24,9 @@ public class AnswerKeyService(IAnswerKeyRepository answerKeyRepository,
         return answerKeyRepository.GetById(answerKeyId);
     }
 
-    public List<AnswerKeyDto>? GetAllAnswerKeys()
+    public List<AnswerKeyDto> GetAllAnswerKeys()
     {
-        return answerKeyRepository.GetAll();
+        return answerKeyRepository.GetAll() ?? [];
     }
 
     public Dictionary<int, char>? GetAnswerKeyAnswers(Guid answerKeyId)

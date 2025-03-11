@@ -40,13 +40,11 @@ public class StudentAnswerService (IStudentAnswerRepository studentAnswerReposit
 
     private Dictionary<int, char> GetFormattedAnswers(List<int[]> answers)
     {
-        var formattedAnswers = opticalConversionService.ConvertNumbersToLetters(answers);
-        return formattedAnswers;
+        return opticalConversionService.ConvertNumbersToLetters(answers);
     }
 
     private double GetGrade(StudentAnswerWithGradeDto studentAnswer)
     {
-        var grade = examCorrectionService.Correction(studentAnswer);
-        return grade;
+        return examCorrectionService.Correction(studentAnswer);
     }
 }
