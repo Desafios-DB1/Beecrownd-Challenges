@@ -9,7 +9,7 @@ public class OpticalConversionService : IOpticalConversionService
     {
         var result = studentAnswersInNumbers.Select((answer, index) =>
             {
-                if (MoreThanOneValueBelow127(answer))
+                if (!OnlyOneValueBelow127(answer))
                 {
                     return new KeyValuePair<int, char>(index + 1, '*');
                 }
@@ -25,9 +25,15 @@ public class OpticalConversionService : IOpticalConversionService
         return result;
     }
 
-    private static bool MoreThanOneValueBelow127(int[] values)
+    private static bool OnlyOneValueBelow127(int[] values)
     {
-        return values.Count(value => value <= 127) > 1;
+        if (values.Count(value => value <= 127) > 1)
+            return false;
+
+        if (values.All(value=>value < 127))
+            return false;
+        
+        return true;
     }
 
     private static int GetMinValueIndex(int[] values)
