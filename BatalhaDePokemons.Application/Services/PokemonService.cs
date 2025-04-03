@@ -20,7 +20,6 @@ public class PokemonService(IPokemonRepository repository, IServiceProvider serv
     public async Task<PokemonResponseDto?> ObterPorIdAsync(Guid id)
     {
         var pokemon = await repository.FindByIdAsync(id);
-        if (pokemon == null) return null;
         return pokemon;
     }
 
