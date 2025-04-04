@@ -6,4 +6,11 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Remove="Enums\EstadoAtual.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BatalhaDePokemons.Crosscutting\BatalhaDePokemons.Crosscutting.csproj" />
+    </ItemGroup>
 </Project>

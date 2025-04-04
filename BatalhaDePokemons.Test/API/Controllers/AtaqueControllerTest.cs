@@ -1,7 +1,8 @@
 ﻿using BatalhaDePokemons.API.Controllers;
-using BatalhaDePokemons.Application.Dtos.Ataque;
-using BatalhaDePokemons.Application.Interfaces;
-using BatalhaDePokemons.Domain.Enums;
+using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
+using BatalhaDePokemons.Crosscutting.Enums;
+using BatalhaDePokemons.Crosscutting.Exceptions;
+using BatalhaDePokemons.Crosscutting.Interfaces;
 using BatalhaDePokemons.Test.Domain.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -27,26 +28,29 @@ public class AtaqueControllerTest
 
         _ataqueServiceMock
             .Setup(s => s.CriarAsync(It.IsAny<AtaqueCreationDto>()))
-            .ReturnsAsync(ataque);
+            .ReturnsAsync(ataque.AtaqueId);
 
-        var result = await _ataqueController.CriarAtaque(ataque);
+        var result = await _ataqueController.CriarAtaque(ataque.MapToCreationDto());
+        
         var createdResult = Assert.IsType<CreatedAtActionResult>(result);
         Assert.Equal(201, createdResult.StatusCode);
-        var returnedAtaque = Assert.IsType<AtaqueResponseDto>(createdResult.Value);
-        Assert.Equal(ataque.Name, returnedAtaque.Name);
+        
+        var returnedAtaqueId = Assert.IsType<Guid>(createdResult.Value);
+        Assert.Equal(ataque.AtaqueId, returnedAtaqueId);
     }
 
     [Fact]
-    public async Task CriarAtaque_QuandoErro_DeveRetornar400BadRequest()
+    public async Task CriarAtaque_QuandoErro_DeveLancarInvalidArgumentException()
     {
+        var ataque = AtaqueBuilder.Novo().Build();
         _ataqueServiceMock
             .Setup(s => s.CriarAsync(It.IsAny<AtaqueCreationDto>()))
-            .ThrowsAsync(new Exception("Erro ao criar ataque"));
+            .ThrowsAsync(new InvalidArgumentException("Tipo de ataque invalido"));
 
-        var result = await _ataqueController.CriarAtaque(new AtaqueCreationDto());
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequestResult.StatusCode);
-        Assert.Equal("Erro ao criar ataque", badRequestResult.Value);
+        var exception = await Assert.ThrowsAsync<InvalidArgumentException>(() =>
+            _ataqueController.CriarAtaque(ataque.MapToCreationDto()));
+        
+        Assert.Equal("Tipo de ataque invalido", exception.Message);
     }
 
     #endregion
@@ -59,24 +63,26 @@ public class AtaqueControllerTest
         var ataque = AtaqueBuilder.Novo().Build();
         _ataqueServiceMock
             .Setup(s => s.ObterPorIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(ataque);
+            .ReturnsAsync(ataque.MapToResponseDto);
 
         var result = await _ataqueController.ObterAtaque(ataque.AtaqueId);
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
         var returnedAtaque = Assert.IsType<AtaqueResponseDto>(okResult.Value);
-        Assert.Equal(ataque.Name, returnedAtaque.Name);
+        Assert.Equal(ataque.Nome, returnedAtaque.Nome);
     }
 
     [Fact]
-    public async Task ObterAtaque_QuandoNaoEncontrado_DeveRetornar404NotFound()
+    public async Task ObterAtaque_QuandoNaoEncontrado_DeveLancarNotFoundException()
     {
         _ataqueServiceMock
             .Setup(s => s.ObterPorIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(null as AtaqueResponseDto);
+            .ThrowsAsync(new NotFoundException("Ataque não encontrado"));
 
-        var result = await _ataqueController.ObterAtaque(Guid.NewGuid());
-        Assert.IsType<NotFoundResult>(result);
+        var exception = await Assert.ThrowsAsync<NotFoundException>(()=>
+            _ataqueController.ObterAtaque(Guid.NewGuid()));
+
+        Assert.Equal("Ataque não encontrado", exception.Message);
     }
 
     #endregion
@@ -88,8 +94,8 @@ public class AtaqueControllerTest
     {
         var ataques = new List<AtaqueResponseDto>
         {
-            AtaqueBuilder.Novo().Build(),
-            AtaqueBuilder.Novo().Build()
+            AtaqueBuilder.Novo().Build().MapToResponseDto(),
+            AtaqueBuilder.Novo().Build().MapToResponseDto()
         };
         _ataqueServiceMock
             .Setup(s => s.ObterTodosAsync())
@@ -103,16 +109,16 @@ public class AtaqueControllerTest
     }
 
     [Fact]
-    public async Task ObterTodosAtaques_QuandoErro_DeveRetornar400BadRequest()
+    public async Task ObterTodosAtaques_QuandoErro_DeveLancarException()
     {
         _ataqueServiceMock
             .Setup(s=>s.ObterTodosAsync())
             .ThrowsAsync(new Exception("Erro ao obter ataques"));
 
-        var result = await _ataqueController.ObterTodosAtaques();
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequestResult.StatusCode);
-        Assert.Equal("Erro ao obter ataques", badRequestResult.Value);
+        var exception = await Assert.ThrowsAsync<Exception>(()=>
+            _ataqueController.ObterTodosAtaques());
+        
+        Assert.Equal("Erro ao obter ataques", exception.Message);
     }
 
     #endregion
@@ -124,8 +130,8 @@ public class AtaqueControllerTest
     {
         var ataques = new List<AtaqueResponseDto>
         {
-            AtaqueBuilder.Novo().Build(),
-            AtaqueBuilder.Novo().Build()
+            AtaqueBuilder.Novo().Build().MapToResponseDto(),
+            AtaqueBuilder.Novo().Build().MapToResponseDto()
         };
         _ataqueServiceMock
             .Setup(s=>s.ObterPorTipoAsync(It.IsAny<Tipo>()))
@@ -139,16 +145,16 @@ public class AtaqueControllerTest
     }
 
     [Fact]
-    public async Task ObterAtaquesPorTipo_QuandoErro_DeveRetornar400BadRequest()
+    public async Task ObterAtaquesPorTipo_QuandoArgumentoInvalido_DeveLancarInvalidArgumentException()
     {
         _ataqueServiceMock
             .Setup(s=>s.ObterPorTipoAsync(It.IsAny<Tipo>()))
-            .ThrowsAsync(new Exception("Erro ao obter ataques"));
+            .ThrowsAsync(new InvalidArgumentException("Tipo inválido"));
+
+        var exception = await Assert.ThrowsAsync<InvalidArgumentException>(()=>
+            _ataqueController.ObterAtaquesPorTipo(It.IsAny<Tipo>()));
         
-        var result = await _ataqueController.ObterAtaquesPorTipo(It.IsAny<Tipo>());
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequestResult.StatusCode);
-        Assert.Equal("Erro ao obter ataques", badRequestResult.Value);
+        Assert.Equal("Tipo inválido", exception.Message);
     }
 
     #endregion
@@ -161,29 +167,30 @@ public class AtaqueControllerTest
         var ataque = AtaqueBuilder.Novo().Build();
         _ataqueServiceMock
             .Setup(s => s.AtualizarAsync(It.IsAny<Guid>(), It.IsAny<AtaqueCreationDto>()))
-            .ReturnsAsync(ataque);
+            .ReturnsAsync(ataque.MapToResponseDto);
 
-        var result = await _ataqueController.AtualizarAtaque(ataque.AtaqueId, ataque);
+        var result = await _ataqueController.AtualizarAtaque(ataque.AtaqueId, ataque.MapToCreationDto());
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
-        var returnedAtaque = Assert.IsType<AtaqueResponseDto>(okResult.Value);
-        Assert.Equal(ataque.Name, returnedAtaque.Name);
+        Assert.IsType<AtaqueResponseDto>(okResult.Value);
     }
 
     [Fact]
-    public async Task AtualizarAtaque_QuandoNaoEncontrado_DeveRetornar404NotFound()
+    public async Task AtualizarAtaque_QuandoNaoEncontrado_DeveLancarNotFoundException()
     {
         _ataqueServiceMock
             .Setup(s => s.AtualizarAsync(It.IsAny<Guid>(), It.IsAny<AtaqueCreationDto>()))
-            .ReturnsAsync(null as AtaqueResponseDto);
+            .ThrowsAsync(new NotFoundException("Ataque não encontrado"));
 
-        var result = await _ataqueController.AtualizarAtaque(Guid.NewGuid(), new AtaqueCreationDto());
-        Assert.IsType<NotFoundResult>(result);
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            _ataqueController.AtualizarAtaque(Guid.NewGuid(), new AtaqueCreationDto()));
+        
+        Assert.Equal("Ataque não encontrado", exception.Message);
     }
 
     #endregion
 
-    #region DeletarAtaque
+    #region RemoverAtaque
 
     [Fact]
     public async Task DeletarAtaque_QuandoValido_DeveRetornar204NoContent()
@@ -191,22 +198,24 @@ public class AtaqueControllerTest
         var ataque = AtaqueBuilder.Novo().Build();
         _ataqueServiceMock
             .Setup(s => s.ObterPorIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(ataque);
+            .ReturnsAsync(ataque.MapToResponseDto);
 
-        var result = await _ataqueController.DeletarAtaque(ataque.AtaqueId);
+        var result = await _ataqueController.RemoverAtaque(ataque.AtaqueId);
         var noContentResult = Assert.IsType<NoContentResult>(result);
         Assert.Equal(204, noContentResult.StatusCode);
     }
 
     [Fact]
-    public async Task DeletarAtaque_QuandoNaoEncontrado_DeveRetornar404NotFound()
+    public async Task DeletarAtaque_QuandoNaoEncontrado_DeveLancarNotFoundException()
     {
         _ataqueServiceMock
-            .Setup(s => s.ObterPorIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(null as AtaqueResponseDto);
+            .Setup(s => s.RemoverAsync(It.IsAny<Guid>()))
+            .ThrowsAsync(new NotFoundException("Ataque não encontrado"));
 
-        var result = await _ataqueController.DeletarAtaque(Guid.NewGuid());
-        Assert.IsType<NotFoundResult>(result);
+        var exception = await Assert.ThrowsAsync<NotFoundException>(()=>
+            _ataqueController.RemoverAtaque(Guid.NewGuid()));
+        
+        Assert.Equal("Ataque não encontrado", exception.Message);
     }
 
     #endregion

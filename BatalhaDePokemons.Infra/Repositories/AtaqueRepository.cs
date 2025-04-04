@@ -1,44 +1,70 @@
-﻿using BatalhaDePokemons.Domain.Enums;
+﻿using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Domain.Models;
 using BatalhaDePokemons.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BatalhaDePokemons.Infra.Repositories;
 
-public class AtaqueRepository(PokemonsDbContext _context) : IAtaqueRepository
+public class AtaqueRepository(PokemonsDbContext context) : IAtaqueRepository
 {
-    public async Task AddAsync(Ataque ataque)
+    public async Task SaveChangesAsync()
     {
-        await _context.Ataques.AddAsync(ataque);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException e)
+        {
+            throw new DbUpdateException("Erro ao salvar as alterações no AtaqueRepository", e);
+        }
+    }
+
+    public async Task<Guid> AddAsync(Ataque ataque)
+    {
+        await context.Ataques.AddAsync(ataque);
+        return ataque.AtaqueId;
+    }
+    public async Task<Guid> AddAndCommitAsync(Ataque ataque)
+    {
+        await context.Ataques.AddAsync(ataque);
+        await SaveChangesAsync(); 
+        return ataque.AtaqueId;
     }
     public async Task<Ataque?> FindByIdAsync(Guid id)
     {
-        return await _context.Ataques
+        return await context.Ataques
             .FirstOrDefaultAsync(p => p.AtaqueId == id);
     }
     
-    public async Task<ICollection<Ataque>> FindAllAsync()
+    public async Task<List<Ataque>> FindAllAsync()
     {
-        return await _context.Ataques.ToListAsync();
+        return await context.Ataques.ToListAsync();
     }
 
-    public async Task<ICollection<Ataque>> FindByTipoAsync(Tipo tipo)
+    public async Task<List<Ataque>> FindByTipoAsync(Tipo tipo)
     {
-        return await _context.Ataques
+        return await context.Ataques
             .Where(p => p.Tipo == tipo)
             .ToListAsync();
     }
-    
-    public async Task UpdateAsync(Ataque updatedAtaque)
+    public void Update(Ataque ataque)
     {
-        _context.Ataques.Update(updatedAtaque);
-        await _context.SaveChangesAsync();
+        context.Ataques.Update(ataque);
     }
-    
-    public async Task RemoveAsync(Ataque ataque)
+    public async Task<Ataque> UpdateAndCommitAsync(Ataque updatedAtaque)
     {
-        _context.Ataques.Remove(ataque);
-        await _context.SaveChangesAsync();
+        context.Ataques.Update(updatedAtaque);
+        await SaveChangesAsync();
+        return updatedAtaque;
+    }
+
+    public void Remove(Ataque ataque)
+    {
+        context.Ataques.Remove(ataque);
+    }
+    public async Task RemoveAndCommitAsync(Ataque ataque)
+    {
+        context.Ataques.Remove(ataque);
+        await SaveChangesAsync(); 
     }
 }

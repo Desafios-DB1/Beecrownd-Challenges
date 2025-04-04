@@ -1,6 +1,6 @@
-﻿using BatalhaDePokemons.Application.Services;
-using BatalhaDePokemons.Domain.Models;
+﻿using BatalhaDePokemons.Domain.Models;
 using BatalhaDePokemons.Domain.Repositories;
+using BatalhaDePokemons.Domain.Services;
 using BatalhaDePokemons.Test.Domain.Builders;
 using Moq;
 
@@ -10,10 +10,12 @@ namespace BatalhaDePokemons.Test.Application.Services
     {
         private readonly PokemonService _pokemonService;
         private readonly Mock<IPokemonRepository> _pokemonRepositoryMock = new();
+        private readonly Mock<IAtaqueRepository> _ataqueRepositoryMock = new();
+        private readonly Mock<IPokemonAtaqueRepository> _pokemonAtaqueRepositoryMock = new();
 
         public PokemonServiceTest()
         {
-            _pokemonService = new PokemonService(_pokemonRepositoryMock.Object, null);
+            _pokemonService = new PokemonService(_pokemonRepositoryMock.Object, _ataqueRepositoryMock.Object, _pokemonAtaqueRepositoryMock.Object);
         }
 
         #region CriarPokemon
@@ -23,12 +25,12 @@ namespace BatalhaDePokemons.Test.Application.Services
         {
             var pokemon = PokemonBuilder.Novo().Build();
 
-            _pokemonRepositoryMock.Setup(r => r.AddAsync(It.IsAny<Pokemon>())).Returns(Task.CompletedTask);
+            _pokemonRepositoryMock.Setup(r => r.AddAndCommitAsync(It.IsAny<Pokemon>())).ReturnsAsync(pokemon.PokemonId);
 
-            var result = await _pokemonService.CriarAsync(pokemon);
+            var result = await _pokemonService.CriarAsync(pokemon.ToCreationDto());
 
             Assert.NotNull(result);
-            Assert.Equal(pokemon.Name, result.Name);
+            Assert.Equal(pokemon.PokemonId, result);
         }
 
         #endregion
@@ -45,7 +47,7 @@ namespace BatalhaDePokemons.Test.Application.Services
             var result = await _pokemonService.ObterPorIdAsync(Guid.NewGuid());
 
             Assert.NotNull(result);
-            Assert.Equal(pokemon.Name, result.Name);
+            Assert.Equal(pokemon.Nome, result.Nome);
         }
 
         #endregion
@@ -79,12 +81,11 @@ namespace BatalhaDePokemons.Test.Application.Services
             var pokemon = PokemonBuilder.Novo().Build();
 
             _pokemonRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
-            _pokemonRepositoryMock.Setup(r => r.UpdateAsync(It.IsAny<Pokemon>())).Returns(Task.CompletedTask);
+            _pokemonRepositoryMock.Setup(r => r.UpdateAndCommitAsync(It.IsAny<Pokemon>())).ReturnsAsync(pokemon);
 
-            var result = await _pokemonService.AtualizarAsync(Guid.NewGuid(), pokemon);
+            var result = await _pokemonService.AtualizarAsync(Guid.NewGuid(), pokemon.ToCreationDto());
 
-            Assert.NotNull(result);
-            Assert.Equal(pokemon.Name, result.Name);
+            Assert.Equal(pokemon.Nome, result.Nome);
         }
 
         #endregion
@@ -100,7 +101,7 @@ namespace BatalhaDePokemons.Test.Application.Services
 
             await _pokemonService.RemoverAsync(pokemon.PokemonId);
             
-            _pokemonRepositoryMock.Verify(r => r.RemoveAsync(It.IsAny<Pokemon>()), Times.Once);
+            _pokemonRepositoryMock.Verify(r => r.RemoveAndCommitAsync(It.IsAny<Pokemon>()), Times.Once);
         }
 
         #endregion

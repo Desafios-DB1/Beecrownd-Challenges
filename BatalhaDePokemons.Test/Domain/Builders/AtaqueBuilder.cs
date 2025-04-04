@@ -1,4 +1,4 @@
-﻿using BatalhaDePokemons.Domain.Enums;
+﻿using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Domain.Models;
 using Bogus;
 
@@ -14,11 +14,11 @@ public class AtaqueBuilder
         {
             _faker = new Faker<Ataque>()
                 .RuleFor(a => a.AtaqueId, faker => faker.Random.Guid())
-                .RuleFor(a => a.Name, f => f.Lorem.Word())
+                .RuleFor(a => a.Nome, f => f.Lorem.Word())
                 .RuleFor(a => a.Tipo, f => f.Random.Enum<Tipo>())
                 .RuleFor(a => a.Poder, f => f.Random.Int())
                 .RuleFor(a => a.Precisao, f => f.Random.Int())
-                .RuleFor(a => a.PP, f => f.Random.Int())
+                .RuleFor(a => a.QuantUsos, f => f.Random.Int())
         };
     }
 

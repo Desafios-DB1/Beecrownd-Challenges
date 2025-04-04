@@ -17,7 +17,7 @@ namespace BatalhaDePokemons.Infra.Migrations
                 newName: "PokemonId");
 
             migrationBuilder.AlterColumn<string>(
-                name: "Name",
+                name: "Nome",
                 table: Entidades.Pokemons,
                 type: "nvarchar(200)",
                 maxLength: 200,
@@ -45,7 +45,7 @@ namespace BatalhaDePokemons.Infra.Migrations
                 newName: "Id");
 
             migrationBuilder.AlterColumn<string>(
-                name: "Name",
+                name: "Nome",
                 table: Entidades.Pokemons,
                 type: "nvarchar(50)",
                 maxLength: 50,

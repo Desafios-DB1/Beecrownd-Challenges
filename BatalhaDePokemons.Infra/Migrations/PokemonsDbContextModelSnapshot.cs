@@ -28,16 +28,10 @@ namespace BatalhaDePokemons.Infra.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("AtaqueId");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("PP")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(5)
-                        .HasColumnName("PP");
 
                     b.Property<int>("Poder")
                         .HasColumnType("int")
@@ -48,6 +42,12 @@ namespace BatalhaDePokemons.Infra.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(50)
                         .HasColumnName("Precisao");
+
+                    b.Property<int>("QuantUsos")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(5)
+                        .HasColumnName("PP");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
@@ -77,11 +77,11 @@ namespace BatalhaDePokemons.Infra.Migrations
                         .HasDefaultValue(1)
                         .HasColumnName("Level");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)")
-                        .HasColumnName("Name");
+                        .HasColumnName("Nome");
 
                     b.Property<string>("Tipo")
                         .IsRequired()

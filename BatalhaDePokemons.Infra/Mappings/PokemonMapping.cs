@@ -1,5 +1,5 @@
 ﻿using BatalhaDePokemons.Crosscutting.Constantes;
-using BatalhaDePokemons.Domain.Enums;
+using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -16,8 +16,8 @@ public class PokemonMapping : IEntityTypeConfiguration<Pokemon>
             .HasColumnName(nameof(Pokemon.PokemonId))
             .ValueGeneratedNever();
         
-        builder.Property(p => p.Name)
-            .HasColumnName(nameof(Pokemon.Name))
+        builder.Property(p => p.Nome)
+            .HasColumnName(nameof(Pokemon.Nome))
             .HasMaxLength(Caracteres.Duzentos)
             .IsRequired();
 

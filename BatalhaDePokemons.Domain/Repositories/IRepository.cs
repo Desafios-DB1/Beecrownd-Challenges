@@ -1,12 +1,14 @@
-﻿using BatalhaDePokemons.Domain.Models;
-
-namespace BatalhaDePokemons.Domain.Repositories;
+﻿namespace BatalhaDePokemons.Domain.Repositories;
 
 public interface IRepository<T> where T : class
 {
-    public Task AddAsync(T entity);
+    public Task SaveChangesAsync();
+    public Task<Guid> AddAsync(T entity);
+    public Task<Guid> AddAndCommitAsync(T entity);
     public Task<T?> FindByIdAsync(Guid id);
-    public Task<ICollection<T>> FindAllAsync();
-    public Task UpdateAsync(T entity);
-    public Task RemoveAsync(T entity);
+    public Task<List<T>> FindAllAsync();
+    public void Update(T entity);
+    public Task<T> UpdateAndCommitAsync(T entity);
+    public void Remove(T entity);
+    public Task RemoveAndCommitAsync(T entity);
 }

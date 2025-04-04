@@ -1,10 +1,9 @@
-﻿using BatalhaDePokemons.Application.Dtos;
-using BatalhaDePokemons.Application.Dtos.Ataque;
-using BatalhaDePokemons.Application.Services;
-using BatalhaDePokemons.Domain.Enums;
+﻿using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Domain.Models;
 using BatalhaDePokemons.Domain.Repositories;
+using BatalhaDePokemons.Domain.Services;
 using BatalhaDePokemons.Test.Domain.Builders;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace BatalhaDePokemons.Test.Application.Services
@@ -26,12 +25,12 @@ namespace BatalhaDePokemons.Test.Application.Services
         {
             var ataque = AtaqueBuilder.Novo().Build();
 
-            _ataqueRepositoryMock.Setup(r => r.AddAsync(It.IsAny<Ataque>())).Returns(Task.CompletedTask);
+            _ataqueRepositoryMock.Setup(r => r.AddAndCommitAsync(It.IsAny<Ataque>())).ReturnsAsync(ataque.AtaqueId);
 
-            var result = await _ataqueService.CriarAsync(ataque);
+            var result = await _ataqueService.CriarAsync(ataque.MapToCreationDto());
 
             Assert.NotNull(result);
-            Assert.Equal(ataque.Name, result.Name);
+            Assert.Equal(ataque.AtaqueId, result);
         }
 
         #endregion
@@ -48,7 +47,7 @@ namespace BatalhaDePokemons.Test.Application.Services
             var result = await _ataqueService.ObterPorIdAsync(ataque.AtaqueId);
 
             Assert.NotNull(result);
-            Assert.Equal(ataque.Name, result.Name);
+            Assert.Equal(ataque.Nome, result.Nome);
         }
 
         #endregion
@@ -101,11 +100,11 @@ namespace BatalhaDePokemons.Test.Application.Services
         {
             var ataque = AtaqueBuilder.Novo().Build();
             _ataqueRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ataque);
+            _ataqueRepositoryMock.Setup(r => r.UpdateAndCommitAsync(It.IsAny<Ataque>())).ReturnsAsync(ataque);
 
-            var result = await _ataqueService.AtualizarAsync(Guid.NewGuid(), ataque);
-
-            Assert.NotNull(result);
-            Assert.Equal(ataque.Name, result.Name);
+            var result = await _ataqueService.AtualizarAsync(ataque.AtaqueId, ataque.MapToCreationDto());
+            
+            Assert.Equal(result.Nome, ataque.Nome);
         }
 
         #endregion
@@ -120,7 +119,7 @@ namespace BatalhaDePokemons.Test.Application.Services
 
             await _ataqueService.RemoverAsync(Guid.NewGuid());
             
-            _ataqueRepositoryMock.Verify(r => r.RemoveAsync(It.IsAny<Ataque>()), Times.Once);
+            _ataqueRepositoryMock.Verify(r => r.RemoveAndCommitAsync(It.IsAny<Ataque>()), Times.Once);
         }
 
         #endregion

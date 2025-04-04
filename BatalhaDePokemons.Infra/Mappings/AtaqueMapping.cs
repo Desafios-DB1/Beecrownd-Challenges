@@ -1,5 +1,5 @@
 ﻿using BatalhaDePokemons.Crosscutting.Constantes;
-using BatalhaDePokemons.Domain.Enums;
+using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -16,7 +16,7 @@ public class AtaqueMapping : IEntityTypeConfiguration<Ataque>
             .HasColumnName(nameof(Ataque.AtaqueId))
             .ValueGeneratedNever();
         
-        builder.Property(a => a.Name)
+        builder.Property(a => a.Nome)
             .HasMaxLength(Caracteres.Duzentos)
             .IsRequired();
         
@@ -35,8 +35,8 @@ public class AtaqueMapping : IEntityTypeConfiguration<Ataque>
             .HasColumnName(nameof(Ataque.Precisao))
             .HasDefaultValue(Caracteres.Cinquenta);
 
-        builder.Property(a => a.PP)
-            .HasColumnName(nameof(Ataque.PP))
+        builder.Property(a => a.QuantUsos)
+            .HasColumnName("PP")
             .HasDefaultValue(Caracteres.Cinco);
     }
 }

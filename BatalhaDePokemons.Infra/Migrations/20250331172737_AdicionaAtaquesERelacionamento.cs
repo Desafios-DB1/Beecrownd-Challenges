@@ -20,7 +20,7 @@ namespace BatalhaDePokemons.Infra.Migrations
                     Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Poder = table.Column<int>(type: "int", nullable: false),
                     Precisao = table.Column<int>(type: "int", nullable: false, defaultValue: 50),
-                    PP = table.Column<int>(type: "int", nullable: false, defaultValue: 5)
+                    QuantUsos = table.Column<int>(type: "int", nullable: false, defaultValue: 5)
                 },
                 constraints: table =>
                 {

@@ -1,14 +1,25 @@
-﻿using BatalhaDePokemons.Domain.Models;
+﻿using BatalhaDePokemons.Crosscutting.Dtos.Pokemon;
+using BatalhaDePokemons.Domain.Models;
 using BatalhaDePokemons.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BatalhaDePokemons.Infra.Repositories;
 public class PokemonRepository(PokemonsDbContext context) : IPokemonRepository
 {
-    public async Task AddAsync(Pokemon pokemon)
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
+    }
+    public async Task<Guid> AddAsync(Pokemon pokemon)
     {
         await context.Pokemons.AddAsync(pokemon);
-        await context.SaveChangesAsync();
+        return pokemon.PokemonId;
+    }
+    public async Task<Guid> AddAndCommitAsync(Pokemon pokemon)
+    {
+        await context.Pokemons.AddAsync(pokemon);
+        await SaveChangesAsync(); 
+        return pokemon.PokemonId;
     }
     public async Task<Pokemon?> FindByIdAsync(Guid id)
     {
@@ -24,20 +35,29 @@ public class PokemonRepository(PokemonsDbContext context) : IPokemonRepository
             .FirstOrDefaultAsync(p => p.PokemonId == id);
     }
     
-    public async Task<ICollection<Pokemon>> FindAllAsync()
+    public async Task<List<Pokemon>> FindAllAsync()
     {
         return await context.Pokemons.ToListAsync();
     }
     
-    public async Task UpdateAsync(Pokemon updatedPokemon)
+    public void Update(Pokemon pokemon)
     {
-        context.Pokemons.Update(updatedPokemon);
-        await context.SaveChangesAsync();
+        context.Pokemons.Update(pokemon);
     }
     
-    public async Task RemoveAsync(Pokemon pokemon)
+    public async Task<Pokemon> UpdateAndCommitAsync(Pokemon updatedPokemon)
+    {
+        context.Pokemons.Update(updatedPokemon);
+        await SaveChangesAsync(); 
+        return updatedPokemon;
+    }
+    public void Remove(Pokemon pokemon)
     {
         context.Pokemons.Remove(pokemon);
-        await context.SaveChangesAsync();
+    }
+    public async Task RemoveAndCommitAsync(Pokemon pokemon)
+    {
+        context.Pokemons.Remove(pokemon);
+        await SaveChangesAsync(); 
     }
 }

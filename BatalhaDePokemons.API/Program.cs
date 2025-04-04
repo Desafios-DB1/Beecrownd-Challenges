@@ -1,11 +1,15 @@
 using System.Reflection;
-using BatalhaDePokemons.Application.Interfaces;
-using BatalhaDePokemons.Application.Services;
-using BatalhaDePokemons.Domain.Enums;
-using BatalhaDePokemons.Domain.Models;
+using System.Text.Json.Serialization;
+using BatalhaDePokemons.API.Middlewares;
+using BatalhaDePokemons.Crosscutting.Enums;
+using BatalhaDePokemons.Crosscutting.Interfaces;
+using BatalhaDePokemons.Crosscutting.Validators;
 using BatalhaDePokemons.Domain.Repositories;
+using BatalhaDePokemons.Domain.Services;
 using BatalhaDePokemons.Infra;
 using BatalhaDePokemons.Infra.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
@@ -14,7 +18,12 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddScoped<IPokemonService, PokemonService>();
 builder.Services.AddScoped<IAtaqueService, AtaqueService>();
@@ -22,6 +31,11 @@ builder.Services.AddScoped<IAtaqueService, AtaqueService>();
 builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
 builder.Services.AddScoped<IAtaqueRepository, AtaqueRepository>();
 builder.Services.AddScoped<IPokemonAtaqueRepository, PokemonAtaqueRepository>();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<AtaqueCreationDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PokemonCreationDtoValidator>();
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -51,9 +65,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers(); 
+app.MapControllers();
 await app.RunAsync();
 return;
 

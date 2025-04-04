@@ -1,5 +1,4 @@
-﻿using BatalhaDePokemons.Domain.Enums;
-using BatalhaDePokemons.Domain.Models;
+﻿using BatalhaDePokemons.Domain.Models;
 using BatalhaDePokemons.Infra.Mappings;
 using Microsoft.EntityFrameworkCore;
 
