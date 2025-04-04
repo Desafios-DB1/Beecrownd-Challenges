@@ -36,7 +36,6 @@ public class AtaqueMapping : IEntityTypeConfiguration<Ataque>
             .HasDefaultValue(Caracteres.Cinquenta);
 
         builder.Property(a => a.QuantUsos)
-            .HasColumnName("PP")
             .HasDefaultValue(Caracteres.Cinco);
     }
 }

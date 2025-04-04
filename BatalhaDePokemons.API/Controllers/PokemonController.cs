@@ -54,10 +54,10 @@ public class PokemonController(IPokemonService service) : ControllerBase
     [AllowAnonymous]
     [ProducesResponseType<PokemonResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ErrorResponse>(StatusCodes.Status404NotFound)]
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> ObterPokemon(Guid id)
+    [HttpGet("{pokemonId:guid}")]
+    public async Task<IActionResult> ObterPokemon(Guid pokemonId)
     {
-         var pokemon = await service.ObterPorIdAsync(id); 
+         var pokemon = await service.ObterPorIdAsync(pokemonId); 
          return Ok(pokemon);
     }
     
