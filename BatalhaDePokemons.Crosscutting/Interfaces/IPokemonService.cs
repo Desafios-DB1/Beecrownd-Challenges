@@ -11,4 +11,5 @@ public interface IPokemonService
     Task RemoverAsync(Guid id);
     Task VincularAtaqueAsync(Guid pokemonId, Guid ataqueId);
     Task<List<AtaqueResponseDto>> ObterAtaquesPorPokemonIdAsync(Guid pokemonId);
+    Task<PokemonResponseDto> ObterPorIdComAtaquesAsync(Guid id);
 }

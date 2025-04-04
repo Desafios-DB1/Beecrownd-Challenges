@@ -26,29 +26,5 @@ public class Pokemon
     public StatusDeCombate Status { get; set; }
     public ICollection<Ataque> Ataques { get; set; }
     public ICollection<PokemonAtaque> PokemonAtaques { get; set; } = [];
-
-    public PokemonResponseDto ToResponseDto()
-    {
-        return new PokemonResponseDto()
-        {
-            Nome = Nome,
-            Level = Level,
-            Hp = Status.Hp
-        };
-    }
-
-    public PokemonCreationDto ToCreationDto()
-    {
-        return new PokemonCreationDto()
-        {
-            Nome = Nome,
-            Level = Level,
-            Hp = Status.Hp,
-            Tipo = Tipo.ToString(),
-            Atk = Status.Atk,
-            Def = Status.Def,
-            Spd = Status.Spd
-        };
-    }
 }
 

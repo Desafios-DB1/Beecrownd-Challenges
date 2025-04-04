@@ -3,8 +3,7 @@ using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 using BatalhaDePokemons.Crosscutting.Dtos.Pokemon;
 using BatalhaDePokemons.Crosscutting.Exceptions;
 using BatalhaDePokemons.Crosscutting.Interfaces;
-using BatalhaDePokemons.Domain.Models;
-using BatalhaDePokemons.Domain.Repositories;
+using BatalhaDePokemons.Domain.Mappers;
 using BatalhaDePokemons.Test.Domain.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -34,7 +33,7 @@ public class PokemonControllerTest
             .ReturnsAsync(pokemon.PokemonId);
         
         // Act
-        var result = await _pokemonController.CriarPokemon(pokemon.ToCreationDto());
+        var result = await _pokemonController.CriarPokemon(PokemonMapper.MapToCreationDto(pokemon));
         
         var createdResult = Assert.IsType<CreatedAtActionResult>(result);
         Assert.Equal(201, createdResult.StatusCode);
@@ -52,7 +51,7 @@ public class PokemonControllerTest
             .ThrowsAsync(new InvalidArgumentException("Tipo inválido"));
         
         var exception = await Assert.ThrowsAsync<InvalidArgumentException>(()=>
-            _pokemonController.CriarPokemon(pokemon.ToCreationDto()));
+            _pokemonController.CriarPokemon(PokemonMapper.MapToCreationDto(pokemon)));
         
         Assert.Equal("Tipo inválido", exception.Message);
     }
@@ -99,8 +98,8 @@ public class PokemonControllerTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
         _pokemonServiceMock
-            .Setup(s=>s.ObterPorIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(pokemon.ToResponseDto);
+            .Setup(s=>s.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(PokemonMapper.MapToResponseDto(pokemon));
         
         var result = await _pokemonController.ObterPokemon(pokemon.PokemonId);
         
@@ -114,7 +113,7 @@ public class PokemonControllerTest
     public async Task ObterPokemon_QuandoNaoExiste_DeveLancarNotFoundException()
     {
         _pokemonServiceMock
-            .Setup(s=>s.ObterPorIdAsync(It.IsAny<Guid>()))
+            .Setup(s=>s.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
             .ThrowsAsync(new NotFoundException("Pokemon não encontrado"));
         
         var exception = await Assert.ThrowsAsync<NotFoundException>(()=>
@@ -128,7 +127,7 @@ public class PokemonControllerTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
         _pokemonServiceMock
-            .Setup(s=>s.ObterPorIdAsync(It.IsAny<Guid>()))
+            .Setup(s=>s.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
             .ThrowsAsync(new Exception("Erro no banco de dados"));
         
         var exception = await Assert.ThrowsAsync<Exception>(()=>
@@ -146,8 +145,8 @@ public class PokemonControllerTest
     {
         var ataques = new List<AtaqueResponseDto>
         {
-            AtaqueBuilder.Novo().Build().MapToResponseDto(),
-            AtaqueBuilder.Novo().Build().MapToResponseDto()
+            AtaqueMapper.MapToResponseDto(AtaqueBuilder.Novo().Build()),
+            AtaqueMapper.MapToResponseDto(AtaqueBuilder.Novo().Build())
         };
         _pokemonServiceMock
             .Setup(s => s.ObterAtaquesPorPokemonIdAsync(It.IsAny<Guid>()))
@@ -183,9 +182,9 @@ public class PokemonControllerTest
         var pokemon = PokemonBuilder.Novo().Build();
         _pokemonServiceMock
             .Setup(s=>s.AtualizarAsync(It.IsAny<Guid>(), It.IsAny<PokemonCreationDto>()))
-            .ReturnsAsync(pokemon.ToResponseDto);
+            .ReturnsAsync(PokemonMapper.MapToResponseDto(pokemon));
         
-        var result = await _pokemonController.AtualizarPokemon(pokemon.PokemonId, pokemon.ToCreationDto());
+        var result = await _pokemonController.AtualizarPokemon(pokemon.PokemonId, PokemonMapper.MapToCreationDto(pokemon));
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
         var returnedPokemon = Assert.IsType<PokemonResponseDto>(okResult.Value);
@@ -201,7 +200,7 @@ public class PokemonControllerTest
             .ThrowsAsync(new InvalidArgumentException("Tipo inválido"));
         
         var exception = await Assert.ThrowsAsync<InvalidArgumentException>(()=>
-            _pokemonController.AtualizarPokemon(Guid.NewGuid(), pokemon.ToCreationDto()));
+            _pokemonController.AtualizarPokemon(Guid.NewGuid(), PokemonMapper.MapToCreationDto(pokemon)));
         
         Assert.Equal("Tipo inválido", exception.Message);
     }
@@ -215,7 +214,7 @@ public class PokemonControllerTest
             .ThrowsAsync(new NotFoundException("Pokemon não encontrado"));
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(()=>
-            _pokemonController.AtualizarPokemon(Guid.NewGuid(), pokemon.ToCreationDto()));
+            _pokemonController.AtualizarPokemon(Guid.NewGuid(), PokemonMapper.MapToCreationDto(pokemon)));
         
         Assert.Equal("Pokemon não encontrado", exception.Message);
     }
@@ -230,7 +229,7 @@ public class PokemonControllerTest
         var pokemon = PokemonBuilder.Novo().Build();
         _pokemonServiceMock
             .Setup(s => s.ObterPorIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(pokemon.ToResponseDto);
+            .ReturnsAsync(PokemonMapper.MapToResponseDto(pokemon));
         
         var result = await _pokemonController.DeletarPokemon(pokemon.PokemonId);
         var noContentResult = Assert.IsType<NoContentResult>(result);

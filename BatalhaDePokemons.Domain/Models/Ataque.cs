@@ -24,27 +24,4 @@ public class Ataque
     public int QuantUsos { get; set; }
     public ICollection<Pokemon> Pokemons { get; set; }
     public ICollection<PokemonAtaque> PokemonAtaques { get; set; } = [];
-
-    public AtaqueResponseDto MapToResponseDto()
-    {
-        return new AtaqueResponseDto()
-        {
-            Nome = Nome,
-            Tipo = Tipo,
-            Poder = Poder,
-            QuantUsos = QuantUsos,
-        };
-    }
-
-    public AtaqueCreationDto MapToCreationDto()
-    {
-        return new AtaqueCreationDto()
-        {
-            Nome = Nome,
-            Tipo = Tipo.ToString(),
-            Poder = Poder,
-            Precisao = Precisao,
-            QuantUsos = QuantUsos,
-        };
-    }
 }

@@ -8,15 +8,8 @@ namespace BatalhaDePokemons.Infra.Repositories;
 public class AtaqueRepository(PokemonsDbContext context) : IAtaqueRepository
 {
     public async Task SaveChangesAsync()
-    {
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateException e)
-        {
-            throw new DbUpdateException("Erro ao salvar as alterações no AtaqueRepository", e);
-        }
+    { 
+        await context.SaveChangesAsync();
     }
 
     public async Task<Guid> AddAsync(Ataque ataque)

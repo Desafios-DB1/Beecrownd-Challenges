@@ -3,6 +3,7 @@ using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Crosscutting.Exceptions;
 using BatalhaDePokemons.Crosscutting.Interfaces;
+using BatalhaDePokemons.Domain.Mappers;
 using BatalhaDePokemons.Test.Domain.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -30,7 +31,7 @@ public class AtaqueControllerTest
             .Setup(s => s.CriarAsync(It.IsAny<AtaqueCreationDto>()))
             .ReturnsAsync(ataque.AtaqueId);
 
-        var result = await _ataqueController.CriarAtaque(ataque.MapToCreationDto());
+        var result = await _ataqueController.CriarAtaque(AtaqueMapper.MapToCreationDto(ataque));
         
         var createdResult = Assert.IsType<CreatedAtActionResult>(result);
         Assert.Equal(201, createdResult.StatusCode);
@@ -48,7 +49,7 @@ public class AtaqueControllerTest
             .ThrowsAsync(new InvalidArgumentException("Tipo de ataque invalido"));
 
         var exception = await Assert.ThrowsAsync<InvalidArgumentException>(() =>
-            _ataqueController.CriarAtaque(ataque.MapToCreationDto()));
+            _ataqueController.CriarAtaque(AtaqueMapper.MapToCreationDto(ataque)));
         
         Assert.Equal("Tipo de ataque invalido", exception.Message);
     }
@@ -63,7 +64,7 @@ public class AtaqueControllerTest
         var ataque = AtaqueBuilder.Novo().Build();
         _ataqueServiceMock
             .Setup(s => s.ObterPorIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(ataque.MapToResponseDto);
+            .ReturnsAsync(AtaqueMapper.MapToResponseDto(ataque));
 
         var result = await _ataqueController.ObterAtaque(ataque.AtaqueId);
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -94,8 +95,8 @@ public class AtaqueControllerTest
     {
         var ataques = new List<AtaqueResponseDto>
         {
-            AtaqueBuilder.Novo().Build().MapToResponseDto(),
-            AtaqueBuilder.Novo().Build().MapToResponseDto()
+            AtaqueMapper.MapToResponseDto(AtaqueBuilder.Novo().Build()),
+            AtaqueMapper.MapToResponseDto(AtaqueBuilder.Novo().Build())
         };
         _ataqueServiceMock
             .Setup(s => s.ObterTodosAsync())
@@ -130,8 +131,8 @@ public class AtaqueControllerTest
     {
         var ataques = new List<AtaqueResponseDto>
         {
-            AtaqueBuilder.Novo().Build().MapToResponseDto(),
-            AtaqueBuilder.Novo().Build().MapToResponseDto()
+            AtaqueMapper.MapToResponseDto(AtaqueBuilder.Novo().Build()),
+            AtaqueMapper.MapToResponseDto(AtaqueBuilder.Novo().Build())
         };
         _ataqueServiceMock
             .Setup(s=>s.ObterPorTipoAsync(It.IsAny<Tipo>()))
@@ -167,9 +168,9 @@ public class AtaqueControllerTest
         var ataque = AtaqueBuilder.Novo().Build();
         _ataqueServiceMock
             .Setup(s => s.AtualizarAsync(It.IsAny<Guid>(), It.IsAny<AtaqueCreationDto>()))
-            .ReturnsAsync(ataque.MapToResponseDto);
+            .ReturnsAsync(AtaqueMapper.MapToResponseDto(ataque));
 
-        var result = await _ataqueController.AtualizarAtaque(ataque.AtaqueId, ataque.MapToCreationDto());
+        var result = await _ataqueController.AtualizarAtaque(ataque.AtaqueId, AtaqueMapper.MapToCreationDto(ataque));
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
         Assert.IsType<AtaqueResponseDto>(okResult.Value);
@@ -198,7 +199,7 @@ public class AtaqueControllerTest
         var ataque = AtaqueBuilder.Novo().Build();
         _ataqueServiceMock
             .Setup(s => s.ObterPorIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(ataque.MapToResponseDto);
+            .ReturnsAsync(AtaqueMapper.MapToResponseDto(ataque));
 
         var result = await _ataqueController.RemoverAtaque(ataque.AtaqueId);
         var noContentResult = Assert.IsType<NoContentResult>(result);

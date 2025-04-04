@@ -1,7 +1,9 @@
-﻿using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
+﻿using BatalhaDePokemons.Crosscutting.Constantes;
+using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Crosscutting.Exceptions;
 using BatalhaDePokemons.Crosscutting.Interfaces;
+using BatalhaDePokemons.Domain.Mappers;
 using BatalhaDePokemons.Domain.Models;
 using BatalhaDePokemons.Domain.Repositories;
 
@@ -12,7 +14,7 @@ public class AtaqueService(IAtaqueRepository repository) : IAtaqueService
     public async Task<Guid> CriarAsync(AtaqueCreationDto ataque)
     {
         if (!Enum.TryParse<Tipo>(ataque.Tipo, true, out var tipoConvertido))
-            throw new InvalidArgumentException($"Tipo {ataque.Tipo} é inválido");
+            throw new InvalidArgumentException(ExceptionMessages.TipoInvalido(ataque.Tipo));
         
         var newAtaque = new Ataque(
             ataque.Nome, tipoConvertido, ataque.Poder, ataque.Precisao, ataque.QuantUsos);
@@ -24,33 +26,30 @@ public class AtaqueService(IAtaqueRepository repository) : IAtaqueService
     public async Task<AtaqueResponseDto?> ObterPorIdAsync(Guid id)
     {
         var ataque = await repository.FindByIdAsync(id) 
-                     ?? throw new NotFoundException($"O ataque com ID {id} não foi encontrado.");
+                     ?? throw new NotFoundException(ExceptionMessages.AtaqueNaoEncontrado(id));
         
-        return ataque.MapToResponseDto();
+        return AtaqueMapper.MapToResponseDto(ataque);
     }
 
     public async Task<List<AtaqueResponseDto>> ObterTodosAsync()
     {
         var ataques = await repository.FindAllAsync();
-        return ataques.Select(ataque => ataque.MapToResponseDto()).ToList();
+        return ataques.Select(AtaqueMapper.MapToResponseDto).ToList();
     }
 
     public async Task<List<AtaqueResponseDto>> ObterPorTipoAsync(Tipo tipo)
     {
-        if (!Enum.TryParse<Tipo>(tipo.ToString(), true, out var tipoConvertido))
-            throw new InvalidArgumentException($"Tipo {tipo} é invalido!");
-        
-        var ataques = await repository.FindByTipoAsync(tipoConvertido);
-        return ataques.Select(ataque => ataque.MapToResponseDto()).ToList();
+        var ataques = await repository.FindByTipoAsync(tipo);
+        return ataques.Select(AtaqueMapper.MapToResponseDto).ToList();
     }
 
     public async Task<AtaqueResponseDto> AtualizarAsync(Guid ataqueId, AtaqueCreationDto ataque)
     {
         if (!Enum.TryParse<Tipo>(ataque.Tipo, true, out var tipoConvertido))
-            throw new InvalidArgumentException($"Tipo {ataque.Tipo} é inválido");
+            throw new InvalidArgumentException(ExceptionMessages.TipoInvalido(ataque.Tipo));
         
         var ataqueAntigo = await repository.FindByIdAsync(ataqueId)
-            ?? throw new NotFoundException($"O ataque com ID {ataqueId} não foi encontrado.");
+            ?? throw new NotFoundException(ExceptionMessages.AtaqueNaoEncontrado(ataqueId));
         
         ataqueAntigo.Nome = ataque.Nome;
         ataqueAntigo.Tipo = tipoConvertido;
@@ -59,13 +58,13 @@ public class AtaqueService(IAtaqueRepository repository) : IAtaqueService
         ataqueAntigo.QuantUsos = ataque.QuantUsos;
         
         var ataqueAtualizado = await repository.UpdateAndCommitAsync(ataqueAntigo);
-        return ataqueAtualizado.MapToResponseDto();
+        return AtaqueMapper.MapToResponseDto(ataqueAtualizado);
     }
 
     public async Task RemoverAsync(Guid id)
     {
         var ataque = await repository.FindByIdAsync(id) 
-                     ?? throw new NotFoundException($"O ataque com ID {id} não foi encontrado.");
+                     ?? throw new NotFoundException(ExceptionMessages.AtaqueNaoEncontrado(id));
         await repository.RemoveAndCommitAsync(ataque);
     }
 }

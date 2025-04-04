@@ -1,8 +1,10 @@
-﻿using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
+﻿using BatalhaDePokemons.Crosscutting.Constantes;
+using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 using BatalhaDePokemons.Crosscutting.Dtos.Pokemon;
 using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Crosscutting.Exceptions;
 using BatalhaDePokemons.Crosscutting.Interfaces;
+using BatalhaDePokemons.Domain.Mappers;
 using BatalhaDePokemons.Domain.Models;
 using BatalhaDePokemons.Domain.Repositories;
 
@@ -12,7 +14,7 @@ public class PokemonService(IPokemonRepository repository, IAtaqueRepository ata
     public async Task<Guid> CriarAsync(PokemonCreationDto pokemon)
     {
         if (!Enum.TryParse<Tipo>(pokemon.Tipo, true, out var tipoConvertido))
-            throw new ArgumentException($"Tipo {pokemon.Tipo} é inválido.");
+            throw new ArgumentException(ExceptionMessages.TipoInvalido(pokemon.Tipo));
         
         var novoPokemon = new Pokemon(
             pokemon.Nome, pokemon.Level, tipoConvertido, pokemon.Hp, pokemon.Spd, pokemon.Def, pokemon.Atk);
@@ -23,23 +25,23 @@ public class PokemonService(IPokemonRepository repository, IAtaqueRepository ata
     public async Task<PokemonResponseDto?> ObterPorIdAsync(Guid id)
     {
         var pokemon = await repository.FindByIdAsync(id)
-            ?? throw new NotFoundException($"O pokemon com id {id} não foi encontrado.");
-        return pokemon.ToResponseDto();
+            ?? throw new NotFoundException(ExceptionMessages.PokemonNaoEncontrado(id));
+        return PokemonMapper.MapToResponseDto(pokemon);
     }
 
     public async Task<List<PokemonResponseDto>> ObterTodosAsync()
     {
         var pokemons = await repository.FindAllAsync();
-        return pokemons.Select(pokemon => pokemon.ToResponseDto()).ToList();
+        return pokemons.Select(PokemonMapper.MapToResponseDto).ToList();
     }
 
     public async Task<PokemonResponseDto> AtualizarAsync(Guid pokemonId, PokemonCreationDto pokemon)
     {
         if (!Enum.TryParse<Tipo>(pokemon.Tipo, true, out var tipoConvertido))
-            throw new InvalidArgumentException($"Tipo {pokemon.Tipo} é inválido");
+            throw new InvalidArgumentException(ExceptionMessages.TipoInvalido(pokemon.Tipo));
 
         var pokemonAntigo = await repository.FindByIdAsync(pokemonId)
-                         ?? throw new NotFoundException($"Pokemon com id {pokemonId} não foi encontrado.");
+                         ?? throw new NotFoundException(ExceptionMessages.PokemonNaoEncontrado(pokemonId));
         
         pokemonAntigo.Nome = pokemon.Nome;
         pokemonAntigo.Level = pokemon.Level;
@@ -50,28 +52,28 @@ public class PokemonService(IPokemonRepository repository, IAtaqueRepository ata
         pokemonAntigo.Status.Atk = pokemon.Atk;
         
         var pokemonAtualizado = await repository.UpdateAndCommitAsync(pokemonAntigo);
-        return pokemonAtualizado.ToResponseDto();
+        return PokemonMapper.MapToResponseDto(pokemonAtualizado);
     }
 
     public async Task RemoverAsync(Guid id)
     {
         var pokemon = await repository.FindByIdAsync(id)
-            ?? throw new NotFoundException($"Pokemon com o id {id} não foi encontrado.");
+            ?? throw new NotFoundException(ExceptionMessages.PokemonNaoEncontrado(id));
         await repository.RemoveAndCommitAsync(pokemon);
     }
 
     public async Task VincularAtaqueAsync(Guid pokemonId, Guid ataqueId)
     {
         var pokemon = await repository.FindByIdAsync(pokemonId)
-            ?? throw new NotFoundException($"O pokemon com id {pokemonId} não foi encontrado.");
+            ?? throw new NotFoundException(ExceptionMessages.PokemonNaoEncontrado(pokemonId));
 
         var ataque = await ataqueRepository.FindByIdAsync(ataqueId);
         
         if (ataque == null)
-            throw new NotFoundException($"O ataque com id {ataqueId} não foi encontrado.");
+            throw new NotFoundException(ExceptionMessages.AtaqueNaoEncontrado(ataqueId));
 
         if (pokemon.PokemonAtaques.Count >= 4)
-            throw new MaxAtaquesException("Este pokemon já possui o máximo de ataques possível.");
+            throw new MaxAtaquesException(ExceptionMessages.MaxAtaquesPossivel);
 
         var pokemonAtaque = new PokemonAtaque
         {
@@ -85,11 +87,19 @@ public class PokemonService(IPokemonRepository repository, IAtaqueRepository ata
     public async Task<List<AtaqueResponseDto>> ObterAtaquesPorPokemonIdAsync(Guid pokemonId)
     {
         var pokemon = await repository.FindByIdWithAtaquesAsync(pokemonId)
-                      ?? throw new NotFoundException($"Pokemon com o id {pokemonId} não foi encontrado.");
+                      ?? throw new NotFoundException(ExceptionMessages.PokemonNaoEncontrado(pokemonId));
 
         return pokemon.PokemonAtaques
-            .Select(pa => pa.Ataque.MapToResponseDto())
+            .Select(pa => AtaqueMapper.MapToResponseDto(pa.Ataque))
             .ToList();
+    }
+
+    public async Task<PokemonResponseDto> ObterPorIdComAtaquesAsync(Guid id)
+    {
+        var pokemon = await repository.FindByIdWithAtaquesAsync(id)
+            ?? throw new NotFoundException(ExceptionMessages.PokemonNaoEncontrado(id));
+        
+        return PokemonMapper.MapToResponseDto(pokemon);
     }
 
 }

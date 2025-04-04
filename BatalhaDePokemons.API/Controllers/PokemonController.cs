@@ -57,7 +57,7 @@ public class PokemonController(IPokemonService service) : ControllerBase
     [HttpGet("{pokemonId:guid}")]
     public async Task<IActionResult> ObterPokemon(Guid pokemonId)
     {
-         var pokemon = await service.ObterPorIdAsync(pokemonId); 
+         var pokemon = await service.ObterPorIdComAtaquesAsync(pokemonId); 
          return Ok(pokemon);
     }
     
