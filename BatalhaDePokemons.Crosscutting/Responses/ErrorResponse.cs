@@ -1,6 +1,6 @@
 ﻿namespace BatalhaDePokemons.Crosscutting.Responses;
 
-public class ErrorResponse
+public abstract class ErrorResponse
 {
     public string Error { get; set; }
 }
