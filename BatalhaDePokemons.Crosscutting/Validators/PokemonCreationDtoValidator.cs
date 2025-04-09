@@ -21,16 +21,16 @@ public class PokemonCreationDtoValidator : AbstractValidator<PokemonCreationDto>
             .Must(tipo => Enum.TryParse<Tipo>(tipo, true, out _))
             .WithMessage(ValidationErrors.EnumInvalido);
 
-        RuleFor(x => x.Hp)
+        RuleFor(x => x.PontosDeVida)
             .GreaterThan(Caracteres.Zero).WithMessage(ValidationErrors.ValorMinimo(Caracteres.Zero));
         
-        RuleFor(x=>x.Atk)
+        RuleFor(x=>x.Ataque)
             .GreaterThan(Caracteres.Zero).WithMessage(ValidationErrors.ValorMinimo(Caracteres.Zero));
         
-        RuleFor(x=>x.Def)
+        RuleFor(x=>x.Defesa)
             .GreaterThan(Caracteres.Zero).WithMessage(ValidationErrors.ValorMinimo(Caracteres.Zero));
         
-        RuleFor(x=>x.Def)
+        RuleFor(x=>x.Defesa)
             .GreaterThan(Caracteres.Zero).WithMessage(ValidationErrors.ValorMinimo(Caracteres.Zero));
     }
 }

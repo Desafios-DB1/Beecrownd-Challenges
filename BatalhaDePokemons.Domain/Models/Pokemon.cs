@@ -1,7 +1,5 @@
 ﻿using BatalhaDePokemons.Crosscutting.Constantes;
-using BatalhaDePokemons.Crosscutting.Dtos.Pokemon;
 using BatalhaDePokemons.Crosscutting.Enums;
-using BatalhaDePokemons.Crosscutting.Exceptions;
 using BatalhaDePokemons.Crosscutting.Exceptions.Pokemon;
 
 namespace BatalhaDePokemons.Domain.Models;
@@ -12,17 +10,17 @@ public class Pokemon
     {
     }
 
-    public Pokemon(string nome, int level, Tipo tipo, int hp, int spd, int def, int atk)
+    public Pokemon(string nome, int nivel, Tipo tipo, int pontosDeVida, int velocidade, int defesa, int ataque)
     {
         Nome = nome;
-        Level = level;
+        Nivel = nivel;
         Tipo = tipo;
-        Status = new StatusDeCombate(hp, spd, def, atk);
+        Status = new StatusDeCombate(pontosDeVida, velocidade, defesa, ataque);
     }
 
     public Guid PokemonId { get; init; } = Guid.NewGuid();
     public string Nome { get; set; }
-    public int Level { get; set; }
+    public int Nivel { get; set; }
     public bool IsDesmaiado { get; set; }
     public Tipo Tipo { get; set; }
     public StatusDeCombate Status { get; init; }
@@ -35,7 +33,7 @@ public class Pokemon
         if (ataque.Tipo != Tipo)
             throw new TiposDiferentesException(ExceptionMessages.TiposDiferentes);
         if (PokemonAtaques.Count >= 4)
-            throw new MaxAtaquesException(ExceptionMessages.MaxAtaquesPossivel);
+            throw new MaximoDeAtaquesException(ExceptionMessages.MaxAtaquesPossivel);
         if (JaAprendeuAtaque(ataque.AtaqueId))
             throw new JaAprendeuAtaqueException(ExceptionMessages.JaAprendeuAtaque(ataque.Nome));
     }
@@ -47,14 +45,14 @@ public class Pokemon
 
     public void RecebeDano(int poder)
     {
-        Status.Hp -= poder;
-        if (Status.Hp <= 0)
+        Status.PontosDeVida -= poder;
+        if (Status.PontosDeVida <= 0)
             IsDesmaiado = true;
     }
 
     public void Curar(int newHp)
     {
-        Status.Hp = newHp;
+        Status.PontosDeVida = newHp;
     }
 }
 

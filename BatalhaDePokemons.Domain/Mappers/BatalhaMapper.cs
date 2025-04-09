@@ -27,11 +27,11 @@ public static class BatalhaMapper
             
             Pokemon1Id = batalha.Pokemon1Id,
             Pokemon1Nome = pokemon1.Nome,
-            Pokemon1Hp = pokemon1.Status.Hp,
+            Pokemon1Hp = pokemon1.Status.PontosDeVida,
             
             Pokemon2Id = batalha.Pokemon2Id,
             Pokemon2Nome = pokemon2.Nome,
-            Pokemon2Hp = pokemon2.Status.Hp,
+            Pokemon2Hp = pokemon2.Status.PontosDeVida,
             
             ProximoTurnoDoPokemonId = batalha.ProximoTurnoDoPokemonId,
             IsFinalizada = batalha.IsFinalizada,

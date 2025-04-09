@@ -116,8 +116,8 @@ public class PokemonController(IPokemonService service) : ControllerBase
     /// Altera o hp atual do pokemon
     /// </summary>
     /// <param name="pokemonId">Guid do pokemon</param>
-    /// <param name="newHp">Novo hp para o pokemon</param>
-    /// <response code="200">Hp do pokemon atualizado com sucesso</response>
+    /// <param name="novoPontosDeVida">Nova quantidade de vida para o pokemon</param>
+    /// <response code="200">Quantidade de vida do pokemon atualizado com sucesso</response>
     /// <response code="404">Pokemon não encontrado</response>
     /// /// <response code="400">Erro ao realizar cura</response>
     [AllowAnonymous]
@@ -125,9 +125,9 @@ public class PokemonController(IPokemonService service) : ControllerBase
     [ProducesResponseType<ErrorResponse>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
     [HttpPatch("{pokemonId:guid}/curar")]
-    public async Task<IActionResult> CurarPokemon(Guid pokemonId, int newHp)
+    public async Task<IActionResult> CurarPokemon(Guid pokemonId, int novoPontosDeVida)
     {
-        var pokemon = await service.CurarPokemonAsync(pokemonId, newHp);
+        var pokemon = await service.CurarPokemonAsync(pokemonId, novoPontosDeVida);
         return Ok(pokemon);
     }
     

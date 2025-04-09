@@ -2,16 +2,16 @@
 public class StatusDeCombate
 {
     public StatusDeCombate() { }
-    public StatusDeCombate(int hp, int spd, int def, int atk)
+    public StatusDeCombate(int pontosDeVida, int velocidade, int def, int ataque)
     {
-        Hp = hp;
-        Spd = spd;
-        Def = def;
-        Atk = atk;
+        PontosDeVida = pontosDeVida;
+        Velocidade = velocidade;
+        Defesa = def;
+        Ataque = ataque;
     }
     
-    public int Hp { get; set; }
-    public int Spd { get; set; }
-    public int Def { get; set; }
-    public int Atk { get; set; }
+    public int PontosDeVida { get; set; }
+    public int Velocidade { get; set; }
+    public int Defesa { get; set; }
+    public int Ataque { get; set; }
 }

@@ -12,8 +12,8 @@ public static class PokemonMapper
         {
             PokemonId = pokemon.PokemonId,
             Nome = pokemon.Nome,
-            Level = pokemon.Level,
-            Hp = pokemon.Status.Hp,
+            Level = pokemon.Nivel,
+            Hp = pokemon.Status.PontosDeVida,
             Ataques = pokemon.Ataques?.Select(pa => new AtaqueResponseDto
             {
                 Nome = pa.Nome,
@@ -29,12 +29,12 @@ public static class PokemonMapper
         return new PokemonCreationDto
         {
             Nome = pokemon.Nome,
-            Level = pokemon.Level,
+            Level = pokemon.Nivel,
             IsDesmaiado = pokemon.IsDesmaiado,
-            Hp = pokemon.Status.Hp,
-            Atk = pokemon.Status.Atk,
-            Def = pokemon.Status.Def,
-            Spd = pokemon.Status.Spd,
+            PontosDeVida = pokemon.Status.PontosDeVida,
+            Ataque = pokemon.Status.Ataque,
+            Defesa = pokemon.Status.Defesa,
+            Velocidade = pokemon.Status.Velocidade,
             Tipo = pokemon.Tipo.ToString()
         };
     }

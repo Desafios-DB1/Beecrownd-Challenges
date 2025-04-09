@@ -14,10 +14,10 @@ public class PokemonCreationDtoExample : IExamplesProvider<PokemonCreationDto>
             Level = 30,
             Tipo = Tipo.Fogo.ToString(),
             IsDesmaiado = false,
-            Hp = 40,
-            Spd = 20,
-            Atk = 15,
-            Def = 10
+            PontosDeVida = 40,
+            Velocidade = 20,
+            Ataque = 15,
+            Defesa = 10
         };
     }
 }
