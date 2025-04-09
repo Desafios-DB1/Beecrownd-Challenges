@@ -14,19 +14,19 @@ public static class PokemonMapper
             Nome = pokemon.Nome,
             Level = pokemon.Level,
             Hp = pokemon.Status.Hp,
-            Ataques = pokemon.Ataques.Select(pa => new AtaqueResponseDto
-                {
-                    Nome = pa.Nome,
-                    Poder = pa.Poder,
-                    QuantUsos = pa.QuantUsos,
-                    Tipo = pa.Tipo
-                }).ToList() ?? []
+            Ataques = pokemon.Ataques?.Select(pa => new AtaqueResponseDto
+            {
+                Nome = pa.Nome,
+                Poder = pa.Poder,
+                QuantUsos = pa.QuantUsos,
+                Tipo = pa.Tipo
+            }).ToList() ?? []
         };
     }
 
     public static PokemonCreationDto MapToCreationDto(Pokemon pokemon)
     {
-        return new PokemonCreationDto()
+        return new PokemonCreationDto
         {
             Nome = pokemon.Nome,
             Level = pokemon.Level,

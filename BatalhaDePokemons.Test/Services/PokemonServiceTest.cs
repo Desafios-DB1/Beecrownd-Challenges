@@ -41,7 +41,7 @@ public class PokemonServiceTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
 
-        _pokemonRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
+        _pokemonRepositoryMock.Setup(r => r.FindByIdWithAtaquesAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
 
         var result = await _pokemonService.ObterPorIdAsync(Guid.NewGuid());
 
@@ -79,7 +79,7 @@ public class PokemonServiceTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
 
-        _pokemonRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
+        _pokemonRepositoryMock.Setup(r => r.FindByIdWithAtaquesAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
         _pokemonRepositoryMock.Setup(r => r.UpdateAndCommitAsync(It.IsAny<Pokemon>())).ReturnsAsync(pokemon);
 
         var result = await _pokemonService.AtualizarAsync(Guid.NewGuid(), PokemonMapper.MapToCreationDto(pokemon));
@@ -96,7 +96,7 @@ public class PokemonServiceTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
 
-        _pokemonRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
+        _pokemonRepositoryMock.Setup(r => r.FindByIdWithAtaquesAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
 
         await _pokemonService.RemoverAsync(pokemon.PokemonId);
             

@@ -21,6 +21,22 @@ public class PokemonBuilder
         };
     }
 
+    public PokemonBuilder ComDesmaiado()
+    {
+        _faker.RuleFor(p => p.IsDesmaiado, true);
+        return this;
+    }
+
+    public PokemonBuilder ComAtaques()
+    {
+        _faker.RuleFor(p => p.Ataques, f =>
+        {
+            var ataques = new List<Ataque> { AtaqueBuilder.Novo().Build(), AtaqueBuilder.Novo().Build() };
+            return ataques;
+        });
+        return this;
+    }
+        
     public Pokemon Build()
     {
         return _faker.Generate();
