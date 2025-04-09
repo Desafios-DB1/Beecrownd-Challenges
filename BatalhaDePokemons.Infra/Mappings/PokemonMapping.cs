@@ -29,6 +29,9 @@ public class PokemonMapping : IEntityTypeConfiguration<Pokemon>
             .HasColumnName(nameof(Pokemon.IsDesmaiado))
             .HasDefaultValue(false);
         
+        builder.Property(p=>p.DataHoraCriacao)
+            .HasColumnName(nameof(Pokemon.DataHoraCriacao));
+        
         builder.Property(p => p.Tipo)
             .HasColumnName(nameof(Pokemon.Tipo))
             .HasConversion(
