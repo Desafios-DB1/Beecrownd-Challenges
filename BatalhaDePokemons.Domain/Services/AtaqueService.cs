@@ -1,7 +1,7 @@
 ﻿using BatalhaDePokemons.Crosscutting.Constantes;
 using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 using BatalhaDePokemons.Crosscutting.Enums;
-using BatalhaDePokemons.Crosscutting.Exceptions;
+using BatalhaDePokemons.Crosscutting.Exceptions.Shared;
 using BatalhaDePokemons.Crosscutting.Interfaces;
 using BatalhaDePokemons.Domain.Mappers;
 using BatalhaDePokemons.Domain.Models;
