@@ -35,8 +35,8 @@ namespace BatalhaDePokemons.Test.Services
         [Fact]
         public async Task IniciarBatalha_QuandoValido_DeveCriarBatalha()
         {
-            var atacante = PokemonBuilder.Novo().Build();
-            var defensor = PokemonBuilder.Novo().Build();
+            var atacante = PokemonBuilder.Novo().NaoDesmaiado().Build();
+            var defensor = PokemonBuilder.Novo().NaoDesmaiado().Build();
             var batalha = BatalhaBuilder.Novo().Build();
 
             _pokemonRepositoryMock.Setup(r => r.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
@@ -78,15 +78,11 @@ namespace BatalhaDePokemons.Test.Services
             var defensor = PokemonBuilder.Novo().ComAtaques().Build();
             var ataque = atacante.Ataques.First();
 
-            var batalha = new Batalha
-            {
-                BatalhaId = Guid.NewGuid(),
-                Pokemon1Id = atacante.PokemonId,
-                Pokemon2Id = defensor.PokemonId,
-                IsFinalizada = false,
-                ProximoTurnoDoPokemonId = atacante.PokemonId,
-                Turnos = []
-            };
+            var batalha = BatalhaBuilder.Novo()
+                .ComPokemon(atacante.PokemonId)
+                .ComAtacante(atacante.PokemonId)
+                .NaoFinalizada()
+                .Build();
 
             _batalhaRepositoryMock.Setup(r => r.ObterPorIdComTurnosAsync(batalha.BatalhaId)).ReturnsAsync(batalha);
             _pokemonRepositoryMock.SetupSequence(r => r.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
@@ -104,15 +100,11 @@ namespace BatalhaDePokemons.Test.Services
         public async Task EncerrarBatalha_QuandoValido_DeveEncerrar()
         {
             var pokemon1 = PokemonBuilder.Novo().Build();
-            var pokemon2 = PokemonBuilder.Novo().Build();
 
-            var batalha = new Batalha
-            {
-                BatalhaId = Guid.NewGuid(),
-                Pokemon1Id = pokemon1.PokemonId,
-                Pokemon2Id = pokemon2.PokemonId,
-                IsFinalizada = false
-            };
+            var batalha = BatalhaBuilder.Novo()
+                .ComPokemon(pokemon1.PokemonId)
+                .NaoFinalizada()
+                .Build();
 
             _batalhaRepositoryMock.Setup(r => r.ObterPorIdComTurnosAsync(batalha.BatalhaId)).ReturnsAsync(batalha);
 

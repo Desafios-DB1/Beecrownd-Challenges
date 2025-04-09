@@ -27,6 +27,12 @@ public class PokemonBuilder
         return this;
     }
 
+    public PokemonBuilder NaoDesmaiado()
+    {
+        _faker.RuleFor(p => p.IsDesmaiado, false);
+        return this;
+    }
+
     public PokemonBuilder ComAtaques()
     {
         _faker.RuleFor(p => p.Ataques, f =>

@@ -34,6 +34,24 @@ public class BatalhaBuilder
         });
         return this;
     }
+
+    public BatalhaBuilder ComPokemon(Guid pokemonId)
+    {
+        _faker.RuleFor(b => b.Pokemon1Id, pokemonId);
+        return this;
+    }
+
+    public BatalhaBuilder NaoFinalizada()
+    {
+        _faker.RuleFor(b => b.IsFinalizada, false);
+        return this;
+    }
+
+    public BatalhaBuilder ComAtacante(Guid atacanteId)
+    {
+        _faker.RuleFor(b=>b.ProximoTurnoDoPokemonId, atacanteId);
+        return this;
+    }
     
     public Batalha Build()
     {
