@@ -8,13 +8,13 @@ public static class PokemonMapper
 {
     public static PokemonResponseDto MapToResponseDto(Pokemon pokemon)
     {
-        return new PokemonResponseDto()
+        return new PokemonResponseDto
         {
+            PokemonId = pokemon.PokemonId,
             Nome = pokemon.Nome,
             Level = pokemon.Level,
             Hp = pokemon.Status.Hp,
-            Ataques = pokemon.Ataques?
-                .Select(pa => new AtaqueResponseDto()
+            Ataques = pokemon.Ataques.Select(pa => new AtaqueResponseDto
                 {
                     Nome = pa.Nome,
                     Poder = pa.Poder,
@@ -30,6 +30,7 @@ public static class PokemonMapper
         {
             Nome = pokemon.Nome,
             Level = pokemon.Level,
+            IsDesmaiado = pokemon.IsDesmaiado,
             Hp = pokemon.Status.Hp,
             Atk = pokemon.Status.Atk,
             Def = pokemon.Status.Def,
