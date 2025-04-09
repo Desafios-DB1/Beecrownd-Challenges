@@ -9,6 +9,9 @@ public class PokemonsDbContext(DbContextOptions<PokemonsDbContext> options) : Db
     public DbSet<Pokemon> Pokemons { get; set; }
     public DbSet<Ataque> Ataques { get; set; }
     public DbSet<PokemonAtaque> PokemonAtaques { get; set; }
+    
+    public DbSet<Batalha> Batalhas { get; set; }
+    public DbSet<Turno> Turnos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -16,5 +19,7 @@ public class PokemonsDbContext(DbContextOptions<PokemonsDbContext> options) : Db
         modelBuilder.ApplyConfiguration(new PokemonMapping());
         modelBuilder.ApplyConfiguration(new AtaqueMapping());
         modelBuilder.ApplyConfiguration(new PokemonAtaqueMapping());
+        modelBuilder.ApplyConfiguration(new BatalhaMapping());
+        modelBuilder.ApplyConfiguration(new TurnoMapping());
     }
 }
