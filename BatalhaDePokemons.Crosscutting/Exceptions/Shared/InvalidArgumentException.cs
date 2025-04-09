@@ -1,3 +1,3 @@
-﻿namespace BatalhaDePokemons.Crosscutting.Exceptions;
+﻿namespace BatalhaDePokemons.Crosscutting.Exceptions.Shared;
 
 public class InvalidArgumentException(string messsage) : Exception(messsage);
