@@ -39,6 +39,14 @@ public class PokemonRepository(PokemonsDbContext context) : IPokemonRepository
     {
         return await context.Pokemons.ToListAsync();
     }
+
+    public async Task<List<Pokemon>> FindAllWithAtaquesAsync()
+    {
+        return await context.Pokemons
+            .Include(p => p.PokemonAtaques)
+            .ThenInclude(pa => pa.Ataque)
+            .ToListAsync();
+    }
     
     public void Update(Pokemon pokemon)
     {
