@@ -39,18 +39,18 @@ namespace BatalhaDePokemons.Test.Services
             var defensor = PokemonBuilder.Novo().Build();
             var batalha = BatalhaBuilder.Novo().Build();
 
-            _pokemonRepositoryMock.Setup(r => r.FindByIdWithAtaquesAsync(It.IsAny<Guid>()))
+            _pokemonRepositoryMock.Setup(r => r.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(() => atacante)
                 .Callback<Guid>(id =>
                 {
                     if (id == defensor.PokemonId)
-                        _pokemonRepositoryMock.Setup(r => r.FindByIdWithAtaquesAsync(id)).ReturnsAsync(defensor);
+                        _pokemonRepositoryMock.Setup(r => r.ObterPorIdComAtaquesAsync(id)).ReturnsAsync(defensor);
                 });
 
             _batalhaRepositoryMock.Setup(r => r.ExisteBatalhaAtivaComPokemonAsync(It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .ReturnsAsync(false);
 
-            _batalhaRepositoryMock.Setup(r => r.AddAndCommitAsync(It.IsAny<Batalha>())).ReturnsAsync(batalha.BatalhaId);
+            _batalhaRepositoryMock.Setup(r => r.AdicionarESalvarAsync(It.IsAny<Batalha>())).ReturnsAsync(batalha.BatalhaId);
 
             var result = await _batalhaService.IniciarBatalha(atacante.PokemonId, defensor.PokemonId);
 
@@ -63,7 +63,7 @@ namespace BatalhaDePokemons.Test.Services
             var atacante = PokemonBuilder.Novo().Build();
             var defensor = PokemonBuilder.Novo().ComDesmaiado().Build();
 
-            _pokemonRepositoryMock.SetupSequence(r => r.FindByIdWithAtaquesAsync(It.IsAny<Guid>()))
+            _pokemonRepositoryMock.SetupSequence(r => r.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(atacante)
                 .ReturnsAsync(defensor);
 
@@ -88,16 +88,16 @@ namespace BatalhaDePokemons.Test.Services
                 Turnos = []
             };
 
-            _batalhaRepositoryMock.Setup(r => r.FindByIdWithTurnos(batalha.BatalhaId)).ReturnsAsync(batalha);
-            _pokemonRepositoryMock.SetupSequence(r => r.FindByIdWithAtaquesAsync(It.IsAny<Guid>()))
+            _batalhaRepositoryMock.Setup(r => r.ObterPorIdComTurnosAsync(batalha.BatalhaId)).ReturnsAsync(batalha);
+            _pokemonRepositoryMock.SetupSequence(r => r.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(atacante)
                 .ReturnsAsync(defensor);
 
             await _batalhaService.ExecutarTurno(batalha.BatalhaId, atacante.PokemonId, ataque.AtaqueId);
 
-            _turnoRepositoryMock.Verify(r => r.AddAndCommitAsync(It.IsAny<Turno>()), Times.Once);
-            _pokemonRepositoryMock.Verify(r => r.UpdateAndCommitAsync(defensor), Times.Once);
-            _batalhaRepositoryMock.Verify(r => r.UpdateAndCommitAsync(batalha), Times.Once);
+            _turnoRepositoryMock.Verify(r => r.AdicionarESalvarAsync(It.IsAny<Turno>()), Times.Once);
+            _pokemonRepositoryMock.Verify(r => r.AtualizarESalvarAsync(defensor), Times.Once);
+            _batalhaRepositoryMock.Verify(r => r.AtualizarESalvarAsync(batalha), Times.Once);
         }
 
         [Fact]
@@ -114,17 +114,17 @@ namespace BatalhaDePokemons.Test.Services
                 IsFinalizada = false
             };
 
-            _batalhaRepositoryMock.Setup(r => r.FindByIdWithTurnos(batalha.BatalhaId)).ReturnsAsync(batalha);
+            _batalhaRepositoryMock.Setup(r => r.ObterPorIdComTurnosAsync(batalha.BatalhaId)).ReturnsAsync(batalha);
 
             await _batalhaService.EncerrarBatalhaAsync(batalha.BatalhaId, pokemon1.PokemonId);
 
-            _batalhaRepositoryMock.Verify(r => r.UpdateAndCommitAsync(It.Is<Batalha>(b => b.IsFinalizada)), Times.Once);
+            _batalhaRepositoryMock.Verify(r => r.AtualizarESalvarAsync(It.Is<Batalha>(b => b.IsFinalizada)), Times.Once);
         }
 
         [Fact]
         public async Task ObterBatalhaDetalhada_QuandoNaoExiste_DeveLancarNotFound()
         {
-            _batalhaRepositoryMock.Setup(r => r.FindByIdWithTurnos(It.IsAny<Guid>())).ReturnsAsync((Batalha)null);
+            _batalhaRepositoryMock.Setup(r => r.ObterPorIdComTurnosAsync(It.IsAny<Guid>())).ReturnsAsync((Batalha)null);
 
             await Assert.ThrowsAsync<NotFoundException>(() =>
                 _batalhaService.ObterBatalhaDetalhadaAsync(Guid.NewGuid()));
@@ -133,7 +133,7 @@ namespace BatalhaDePokemons.Test.Services
         [Fact]
         public async Task ObterTodasBatalhas_DeveRetornarLista()
         {
-            _batalhaRepositoryMock.Setup(r => r.FindAllWithTurnosAsync()).ReturnsAsync(new List<Batalha>());
+            _batalhaRepositoryMock.Setup(r => r.ObterTodosComTurnosAsync()).ReturnsAsync(new List<Batalha>());
 
             var result = await _batalhaService.ObterTodasBatalhas();
 

@@ -18,14 +18,14 @@ public class AtaqueService(IAtaqueRepository repository) : IAtaqueService
         
         var newAtaque = new Ataque(
             ataque.Nome, tipoConvertido, ataque.Poder, ataque.Precisao, ataque.QuantUsos);
-        var newAtaqueId = await repository.AddAndCommitAsync(newAtaque);
+        var newAtaqueId = await repository.AdicionarESalvarAsync(newAtaque);
         
         return newAtaqueId;
     }
 
     public async Task<AtaqueResponseDto?> ObterPorIdAsync(Guid id)
     {
-        var ataque = await repository.FindByIdAsync(id) 
+        var ataque = await repository.ObterPorIdAsync(id) 
                      ?? throw new NotFoundException(ExceptionMessages.AtaqueNaoEncontrado(id));
         
         return AtaqueMapper.MapToResponseDto(ataque);
@@ -33,13 +33,13 @@ public class AtaqueService(IAtaqueRepository repository) : IAtaqueService
 
     public async Task<List<AtaqueResponseDto>> ObterTodosAsync()
     {
-        var ataques = await repository.FindAllAsync();
+        var ataques = await repository.ObterTodosAsync();
         return ataques.Select(AtaqueMapper.MapToResponseDto).ToList();
     }
 
     public async Task<List<AtaqueResponseDto>> ObterPorTipoAsync(Tipo tipo)
     {
-        var ataques = await repository.FindByTipoAsync(tipo);
+        var ataques = await repository.ObterPorTipoAsync(tipo);
         return ataques.Select(AtaqueMapper.MapToResponseDto).ToList();
     }
 
@@ -48,7 +48,7 @@ public class AtaqueService(IAtaqueRepository repository) : IAtaqueService
         if (!Enum.TryParse<Tipo>(ataque.Tipo, true, out var tipoConvertido))
             throw new InvalidArgumentException(ExceptionMessages.TipoInvalido(ataque.Tipo));
         
-        var ataqueAntigo = await repository.FindByIdAsync(ataqueId)
+        var ataqueAntigo = await repository.ObterPorIdAsync(ataqueId)
             ?? throw new NotFoundException(ExceptionMessages.AtaqueNaoEncontrado(ataqueId));
         
         ataqueAntigo.Nome = ataque.Nome;
@@ -57,14 +57,14 @@ public class AtaqueService(IAtaqueRepository repository) : IAtaqueService
         ataqueAntigo.Precisao = ataque.Precisao;
         ataqueAntigo.QuantUsos = ataque.QuantUsos;
         
-        var ataqueAtualizado = await repository.UpdateAndCommitAsync(ataqueAntigo);
+        var ataqueAtualizado = await repository.AtualizarESalvarAsync(ataqueAntigo);
         return AtaqueMapper.MapToResponseDto(ataqueAtualizado);
     }
 
     public async Task RemoverAsync(Guid id)
     {
-        var ataque = await repository.FindByIdAsync(id) 
+        var ataque = await repository.ObterPorIdAsync(id) 
                      ?? throw new NotFoundException(ExceptionMessages.AtaqueNaoEncontrado(id));
-        await repository.RemoveAndCommitAsync(ataque);
+        await repository.RemoverESalvarAsync(ataque);
     }
 }

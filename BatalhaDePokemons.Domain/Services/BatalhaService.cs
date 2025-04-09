@@ -37,7 +37,7 @@ public class BatalhaService
             Turnos = []
         };
 
-        await batalhaRepository.AddAndCommitAsync(batalha);
+        await batalhaRepository.AdicionarESalvarAsync(batalha);
         return batalha.BatalhaId;
     }
 
@@ -72,9 +72,9 @@ public class BatalhaService
             DanoCausado = ataque.Poder
         };
         
-        await turnoRepository.AddAndCommitAsync(turno);
-        await pokemonRepository.UpdateAndCommitAsync(defensor);
-        await batalhaRepository.UpdateAndCommitAsync(batalha);
+        await turnoRepository.AdicionarESalvarAsync(turno);
+        await pokemonRepository.AtualizarESalvarAsync(defensor);
+        await batalhaRepository.AtualizarESalvarAsync(batalha);
     }
 
     public async Task EncerrarBatalhaAsync(Guid batalhaId, Guid desistenteId)
@@ -91,12 +91,12 @@ public class BatalhaService
         batalha.IsFinalizada = true;
         batalha.VencedorId = vencedorId;
 
-        await batalhaRepository.UpdateAndCommitAsync(batalha);
+        await batalhaRepository.AtualizarESalvarAsync(batalha);
     }
 
     public async Task<BatalhaDetalhadaDto> ObterBatalhaDetalhadaAsync(Guid batalhaId)
     {
-        var batalha = await batalhaRepository.FindByIdWithTurnos(batalhaId)
+        var batalha = await batalhaRepository.ObterPorIdComTurnosAsync(batalhaId)
                       ?? throw new NotFoundException(ExceptionMessages.BatalhaNaoEncontrada(batalhaId));
         
         var (pokemon1, pokemon2) = await ValidarPokemons(batalha.Pokemon1Id, batalha.Pokemon2Id);
@@ -106,13 +106,13 @@ public class BatalhaService
 
     public async Task<List<BatalhaResponseDto>> ObterTodasBatalhas()
     {
-        var batalhas = await batalhaRepository.FindAllWithTurnosAsync();
+        var batalhas = await batalhaRepository.ObterTodosComTurnosAsync();
         return BatalhaMapper.MapToResponseDtos(batalhas);
     }
 
     private async Task<Batalha> ValidarBatalha(Guid batalhaId)
     {
-        var batalha = await batalhaRepository.FindByIdWithTurnos(batalhaId)
+        var batalha = await batalhaRepository.ObterPorIdComTurnosAsync(batalhaId)
             ?? throw new NotFoundException(ExceptionMessages.BatalhaNaoEncontrada(batalhaId));
 
         if (batalha.IsFinalizada)
@@ -139,10 +139,10 @@ public class BatalhaService
 
     private async Task<(Pokemon pokemon1, Pokemon pokemon2)> ValidarPokemons(Guid pokemon1Id, Guid pokemon2Id)
     {
-        var pokemon1 = await pokemonRepository.FindByIdWithAtaquesAsync(pokemon1Id)
+        var pokemon1 = await pokemonRepository.ObterPorIdComAtaquesAsync(pokemon1Id)
             ?? throw new NotFoundException(ExceptionMessages.PokemonNaoEncontrado(pokemon1Id));
         
-        var pokemon2 = await pokemonRepository.FindByIdWithAtaquesAsync(pokemon2Id)
+        var pokemon2 = await pokemonRepository.ObterPorIdComAtaquesAsync(pokemon2Id)
             ?? throw new NotFoundException(ExceptionMessages.PokemonNaoEncontrado(pokemon2Id));
         
         return (pokemon1, pokemon2);

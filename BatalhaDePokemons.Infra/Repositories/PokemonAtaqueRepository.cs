@@ -6,23 +6,23 @@ namespace BatalhaDePokemons.Infra.Repositories;
 
 public class PokemonAtaqueRepository (PokemonsDbContext context) : IPokemonAtaqueRepository
 {
-    public async Task SaveChangesAsync()
+    public async Task SalvarAsync()
     { 
         await context.SaveChangesAsync();
     }
 
-    public async Task AddAsync(PokemonAtaque pa)
+    public async Task AdicionarAsync(PokemonAtaque pa)
     {
         await context.PokemonAtaques.AddAsync(pa);
     }
 
-    public async Task AddAndCommitAsync(PokemonAtaque pa)
+    public async Task AdicionarESalvarAsync(PokemonAtaque pa)
     {
         await context.PokemonAtaques.AddAsync(pa);
-        await SaveChangesAsync();
+        await SalvarAsync();
     }
     
-    public async Task<List<Ataque>> GetAtaquesByPokemonIdAsync(Guid pokemonId)
+    public async Task<List<Ataque>> ObterAtaquesPorPokemonIdAsync(Guid pokemonId)
     {
         return await context.PokemonAtaques
             .Where(pa => pa.PokemonId == pokemonId)

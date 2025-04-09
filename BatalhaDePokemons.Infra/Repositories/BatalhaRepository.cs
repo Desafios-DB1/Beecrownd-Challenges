@@ -6,70 +6,70 @@ namespace BatalhaDePokemons.Infra.Repositories;
 
 public class BatalhaRepository(PokemonsDbContext context) : IBatalhaRepository
 {
-    public async Task SaveChangesAsync()
+    public async Task SalvarAsync()
     {
         await context.SaveChangesAsync();
     }
 
-    public async Task<Guid> AddAsync(Batalha batalha)
+    public async Task<Guid> AdicionarAsync(Batalha batalha)
     {
         await context.Batalhas.AddAsync(batalha);
         return batalha.BatalhaId;
     }
 
-    public async Task<Guid> AddAndCommitAsync(Batalha batalha)
+    public async Task<Guid> AdicionarESalvarAsync(Batalha batalha)
     {
         await context.Batalhas.AddAsync(batalha);
-        await SaveChangesAsync();
+        await SalvarAsync();
         return batalha.BatalhaId;
     }
 
-    public async Task<Batalha?> FindByIdAsync(Guid id)
+    public async Task<Batalha?> ObterPorIdAsync(Guid id)
     {
         return await context.Batalhas
             .FirstOrDefaultAsync(b => b.BatalhaId == id);
     }
     
-    public async Task<Batalha?> FindByIdWithTurnos(Guid batalhaId)
+    public async Task<Batalha?> ObterPorIdComTurnosAsync(Guid batalhaId)
     {
         return await context.Batalhas
             .Include(b => b.Turnos)
             .FirstOrDefaultAsync(b => b.BatalhaId == batalhaId);
     }
 
-    public async Task<List<Batalha>> FindAllAsync()
+    public async Task<List<Batalha>> ObterTodosAsync()
     {
         return await context.Batalhas.ToListAsync();
     }
 
-    public async Task<List<Batalha>> FindAllWithTurnosAsync()
+    public async Task<List<Batalha>> ObterTodosComTurnosAsync()
     {
         return await context.Batalhas
             .Include(b => b.Turnos)
             .ToListAsync();
     }
 
-    public void Update(Batalha batalha)
+    public void Atualizar(Batalha batalha)
     {
         context.Batalhas.Update(batalha);
     }
 
-    public async Task<Batalha> UpdateAndCommitAsync(Batalha updatedBatalha)
+    public async Task<Batalha> AtualizarESalvarAsync(Batalha updatedBatalha)
     {
         context.Batalhas.Update(updatedBatalha);
-        await SaveChangesAsync();
+        await SalvarAsync();
         return updatedBatalha;
     }
 
-    public void Remove(Batalha batalha)
+    public void Remover(Batalha batalha)
     {
         context.Batalhas.Remove(batalha);
     }
 
-    public async Task RemoveAndCommitAsync(Batalha batalha)
+    public async Task RemoverESalvarAsync(Batalha batalha)
     {
         context.Batalhas.Remove(batalha);
-        await SaveChangesAsync();
+        await SalvarAsync();
     }
 
     public async Task<bool> ExisteBatalhaAtivaComPokemonAsync(Guid pokemon1Id, Guid pokemon2Id)

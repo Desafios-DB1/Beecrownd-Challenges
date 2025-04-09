@@ -6,28 +6,28 @@ using Microsoft.EntityFrameworkCore;
 namespace BatalhaDePokemons.Infra.Repositories;
 public class PokemonRepository(PokemonsDbContext context) : IPokemonRepository
 {
-    public async Task SaveChangesAsync()
+    public async Task SalvarAsync()
     {
         await context.SaveChangesAsync();
     }
-    public async Task<Guid> AddAsync(Pokemon pokemon)
+    public async Task<Guid> AdicionarAsync(Pokemon pokemon)
     {
         await context.Pokemons.AddAsync(pokemon);
         return pokemon.PokemonId;
     }
-    public async Task<Guid> AddAndCommitAsync(Pokemon pokemon)
+    public async Task<Guid> AdicionarESalvarAsync(Pokemon pokemon)
     {
         await context.Pokemons.AddAsync(pokemon);
-        await SaveChangesAsync(); 
+        await SalvarAsync(); 
         return pokemon.PokemonId;
     }
-    public async Task<Pokemon?> FindByIdAsync(Guid id)
+    public async Task<Pokemon?> ObterPorIdAsync(Guid id)
     {
        return await context.Pokemons
            .FirstOrDefaultAsync(p => p.PokemonId == id);
     }
 
-    public async Task<Pokemon?> FindByIdWithAtaquesAsync(Guid id)
+    public async Task<Pokemon?> ObterPorIdComAtaquesAsync(Guid id)
     {
         return await context.Pokemons
             .Include(p => p.PokemonAtaques)
@@ -35,12 +35,12 @@ public class PokemonRepository(PokemonsDbContext context) : IPokemonRepository
             .FirstOrDefaultAsync(p => p.PokemonId == id);
     }
     
-    public async Task<List<Pokemon>> FindAllAsync()
+    public async Task<List<Pokemon>> ObterTodosAsync()
     {
         return await context.Pokemons.ToListAsync();
     }
 
-    public async Task<List<Pokemon>> FindAllWithAtaquesAsync()
+    public async Task<List<Pokemon>> ObterTodosComAtaquesAsync()
     {
         return await context.Pokemons
             .Include(p => p.PokemonAtaques)
@@ -48,24 +48,24 @@ public class PokemonRepository(PokemonsDbContext context) : IPokemonRepository
             .ToListAsync();
     }
     
-    public void Update(Pokemon pokemon)
+    public void Atualizar(Pokemon pokemon)
     {
         context.Pokemons.Update(pokemon);
     }
     
-    public async Task<Pokemon> UpdateAndCommitAsync(Pokemon updatedPokemon)
+    public async Task<Pokemon> AtualizarESalvarAsync(Pokemon updatedPokemon)
     {
         context.Pokemons.Update(updatedPokemon);
-        await SaveChangesAsync(); 
+        await SalvarAsync(); 
         return updatedPokemon;
     }
-    public void Remove(Pokemon pokemon)
+    public void Remover(Pokemon pokemon)
     {
         context.Pokemons.Remove(pokemon);
     }
-    public async Task RemoveAndCommitAsync(Pokemon pokemon)
+    public async Task RemoverESalvarAsync(Pokemon pokemon)
     {
         context.Pokemons.Remove(pokemon);
-        await SaveChangesAsync(); 
+        await SalvarAsync(); 
     }
 }

@@ -6,25 +6,25 @@ namespace BatalhaDePokemons.Infra.Repositories;
 
 public class TurnoRepository(PokemonsDbContext context) : ITurnoRepository
 {
-    public async Task SaveChangesAsync()
+    public async Task SalvarAsync()
     {
         await context.SaveChangesAsync();
     }
 
-    public async Task<Guid> AddAsync(Turno turno)
+    public async Task<Guid> AdicionarAsync(Turno turno)
     {
         await context.Turnos.AddAsync(turno);
         return turno.TurnoId;
     }
 
-    public async Task<Guid> AddAndCommitAsync(Turno turno)
+    public async Task<Guid> AdicionarESalvarAsync(Turno turno)
     {
         await context.Turnos.AddAsync(turno);
-        await SaveChangesAsync();
+        await SalvarAsync();
         return turno.TurnoId;
     }
 
-    public async Task<IEnumerable<Turno>> GetByBatalhaIdAsync(Guid batalhaId)
+    public async Task<IEnumerable<Turno>> ObterPorIdDaBatalhaAsync(Guid batalhaId)
     {
         return await context.Turnos
             .Where(turno => turno.BatalhaId == batalhaId)

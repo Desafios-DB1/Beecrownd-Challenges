@@ -2,13 +2,13 @@
 
 public interface IRepository<T> where T : class
 {
-    public Task SaveChangesAsync();
-    public Task<Guid> AddAsync(T entity);
-    public Task<Guid> AddAndCommitAsync(T entity);
-    public Task<T?> FindByIdAsync(Guid id);
-    public Task<List<T>> FindAllAsync();
-    public void Update(T entity);
-    public Task<T> UpdateAndCommitAsync(T entity);
-    public void Remove(T entity);
-    public Task RemoveAndCommitAsync(T entity);
+    public Task SalvarAsync();
+    public Task<Guid> AdicionarAsync(T entity);
+    public Task<Guid> AdicionarESalvarAsync(T entity);
+    public Task<T?> ObterPorIdAsync(Guid id);
+    public Task<List<T>> ObterTodosAsync();
+    public void Atualizar(T entity);
+    public Task<T> AtualizarESalvarAsync(T entity);
+    public void Remover(T entity);
+    public Task RemoverESalvarAsync(T entity);
 }

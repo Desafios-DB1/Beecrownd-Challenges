@@ -4,8 +4,8 @@ namespace BatalhaDePokemons.Domain.Repositories;
 
 public interface IPokemonAtaqueRepository
 {
-    Task SaveChangesAsync();
-    Task AddAsync(PokemonAtaque pa);
-    Task AddAndCommitAsync(PokemonAtaque pa);
-    Task<List<Ataque>> GetAtaquesByPokemonIdAsync(Guid pokemonId);
+    Task SalvarAsync();
+    Task AdicionarAsync(PokemonAtaque pa);
+    Task AdicionarESalvarAsync(PokemonAtaque pa);
+    Task<List<Ataque>> ObterAtaquesPorPokemonIdAsync(Guid pokemonId);
 }
