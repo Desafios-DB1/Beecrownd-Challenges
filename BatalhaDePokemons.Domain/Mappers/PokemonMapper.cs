@@ -8,32 +8,33 @@ public static class PokemonMapper
 {
     public static PokemonResponseDto MapToResponseDto(Pokemon pokemon)
     {
-        return new PokemonResponseDto()
+        return new PokemonResponseDto
         {
+            PokemonId = pokemon.PokemonId,
             Nome = pokemon.Nome,
-            Level = pokemon.Level,
-            Hp = pokemon.Status.Hp,
-            Ataques = pokemon.Ataques?
-                .Select(pa => new AtaqueResponseDto()
-                {
-                    Nome = pa.Nome,
-                    Poder = pa.Poder,
-                    QuantUsos = pa.QuantUsos,
-                    Tipo = pa.Tipo
-                }).ToList() ?? []
+            Level = pokemon.Nivel,
+            Hp = pokemon.Status.PontosDeVida,
+            Ataques = pokemon.Ataques?.Select(pa => new AtaqueResponseDto
+            {
+                Nome = pa.Nome,
+                Poder = pa.Poder,
+                QuantUsos = pa.QuantUsos,
+                Tipo = pa.Tipo
+            }).ToList() ?? []
         };
     }
 
     public static PokemonCreationDto MapToCreationDto(Pokemon pokemon)
     {
-        return new PokemonCreationDto()
+        return new PokemonCreationDto
         {
             Nome = pokemon.Nome,
-            Level = pokemon.Level,
-            Hp = pokemon.Status.Hp,
-            Atk = pokemon.Status.Atk,
-            Def = pokemon.Status.Def,
-            Spd = pokemon.Status.Spd,
+            Level = pokemon.Nivel,
+            IsDesmaiado = pokemon.IsDesmaiado,
+            PontosDeVida = pokemon.Status.PontosDeVida,
+            Ataque = pokemon.Status.Ataque,
+            Defesa = pokemon.Status.Defesa,
+            Velocidade = pokemon.Status.Velocidade,
             Tipo = pokemon.Tipo.ToString()
         };
     }

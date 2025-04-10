@@ -26,7 +26,7 @@ public class PokemonServiceTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
 
-        _pokemonRepositoryMock.Setup(r => r.AddAndCommitAsync(It.IsAny<Pokemon>())).ReturnsAsync(pokemon.PokemonId);
+        _pokemonRepositoryMock.Setup(r => r.AdicionarESalvarAsync(It.IsAny<Pokemon>())).ReturnsAsync(pokemon.PokemonId);
 
         var result = await _pokemonService.CriarAsync(PokemonMapper.MapToCreationDto(pokemon));
         Assert.Equal(pokemon.PokemonId, result);
@@ -41,7 +41,7 @@ public class PokemonServiceTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
 
-        _pokemonRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
+        _pokemonRepositoryMock.Setup(r => r.ObterPorIdComAtaquesAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
 
         var result = await _pokemonService.ObterPorIdAsync(Guid.NewGuid());
 
@@ -62,7 +62,7 @@ public class PokemonServiceTest
             PokemonBuilder.Novo().Build()
         };
 
-        _pokemonRepositoryMock.Setup(r => r.FindAllAsync()).ReturnsAsync(pokemons);
+        _pokemonRepositoryMock.Setup(r => r.ObterTodosAsync()).ReturnsAsync(pokemons);
 
         var result = await _pokemonService.ObterTodosAsync();
 
@@ -79,8 +79,8 @@ public class PokemonServiceTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
 
-        _pokemonRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
-        _pokemonRepositoryMock.Setup(r => r.UpdateAndCommitAsync(It.IsAny<Pokemon>())).ReturnsAsync(pokemon);
+        _pokemonRepositoryMock.Setup(r => r.ObterPorIdComAtaquesAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
+        _pokemonRepositoryMock.Setup(r => r.AtualizarESalvarAsync(It.IsAny<Pokemon>())).ReturnsAsync(pokemon);
 
         var result = await _pokemonService.AtualizarAsync(Guid.NewGuid(), PokemonMapper.MapToCreationDto(pokemon));
 
@@ -96,11 +96,11 @@ public class PokemonServiceTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
 
-        _pokemonRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
+        _pokemonRepositoryMock.Setup(r => r.ObterPorIdComAtaquesAsync(It.IsAny<Guid>())).ReturnsAsync(pokemon);
 
         await _pokemonService.RemoverAsync(pokemon.PokemonId);
             
-        _pokemonRepositoryMock.Verify(r => r.RemoveAndCommitAsync(It.IsAny<Pokemon>()), Times.Once);
+        _pokemonRepositoryMock.Verify(r => r.RemoverESalvarAsync(It.IsAny<Pokemon>()), Times.Once);
     }
 
     #endregion

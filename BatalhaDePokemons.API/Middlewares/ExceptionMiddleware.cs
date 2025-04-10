@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using BatalhaDePokemons.Crosscutting.Exceptions;
+using BatalhaDePokemons.Crosscutting.Exceptions.Shared;
 
 namespace BatalhaDePokemons.API.Middlewares;
 
@@ -15,25 +16,26 @@ public class ExceptionMiddleware(RequestDelegate next)
         }
         catch (Exception e)
         {
-            await HandleExceptionAsyn(context, e);
+            await HandleExceptionAsync(context, e);
         }
     }
 
-    private static Task HandleExceptionAsyn(HttpContext context, Exception exception)
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var statusCode = exception switch
         {
             DbUpdateException => HttpStatusCode.Conflict,
             NotFoundException => HttpStatusCode.NotFound,
             InvalidArgumentException => HttpStatusCode.BadRequest,
-            MaxAtaquesException => HttpStatusCode.BadRequest,
+            DomainException => HttpStatusCode.BadRequest,
             _ => HttpStatusCode.InternalServerError
         };
 
         var response = new
         {
             message = exception.Message,
-            status = (int)statusCode
+            status = (int)statusCode,
+            error = exception.GetType().Name
         };
         
         context.Response.ContentType = "application/json";

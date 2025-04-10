@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using BatalhaDePokemons.API.Middlewares;
 using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Crosscutting.Interfaces;
+using BatalhaDePokemons.Crosscutting.SwaggerExamples;
 using BatalhaDePokemons.Crosscutting.Validators;
 using BatalhaDePokemons.Domain.Repositories;
 using BatalhaDePokemons.Domain.Services;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,10 +29,15 @@ builder.Services
 
 builder.Services.AddScoped<IPokemonService, PokemonService>();
 builder.Services.AddScoped<IAtaqueService, AtaqueService>();
+builder.Services.AddScoped<IBatalhaService, BatalhaService>();
 
 builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
 builder.Services.AddScoped<IAtaqueRepository, AtaqueRepository>();
 builder.Services.AddScoped<IPokemonAtaqueRepository, PokemonAtaqueRepository>();
+builder.Services.AddScoped<IBatalhaRepository, BatalhaRepository>();
+builder.Services.AddScoped<ITurnoRepository, TurnoRepository>();
+
+builder.Services.AddSwaggerExamplesFromAssemblyOf<PokemonCreationDtoExample>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -120,4 +127,6 @@ void ConfigureSwagger(SwaggerGenOptions c)
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile); 
     c.IncludeXmlComments(xmlPath);
+    
+    c.ExampleFilters();
 }

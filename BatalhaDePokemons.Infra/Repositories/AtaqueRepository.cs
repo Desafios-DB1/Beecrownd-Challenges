@@ -7,57 +7,57 @@ namespace BatalhaDePokemons.Infra.Repositories;
 
 public class AtaqueRepository(PokemonsDbContext context) : IAtaqueRepository
 {
-    public async Task SaveChangesAsync()
+    public async Task SalvarAsync()
     { 
         await context.SaveChangesAsync();
     }
 
-    public async Task<Guid> AddAsync(Ataque ataque)
+    public async Task<Guid> AdicionarAsync(Ataque ataque)
     {
         await context.Ataques.AddAsync(ataque);
         return ataque.AtaqueId;
     }
-    public async Task<Guid> AddAndCommitAsync(Ataque ataque)
+    public async Task<Guid> AdicionarESalvarAsync(Ataque ataque)
     {
         await context.Ataques.AddAsync(ataque);
-        await SaveChangesAsync(); 
+        await SalvarAsync(); 
         return ataque.AtaqueId;
     }
-    public async Task<Ataque?> FindByIdAsync(Guid id)
+    public async Task<Ataque?> ObterPorIdAsync(Guid id)
     {
         return await context.Ataques
             .FirstOrDefaultAsync(p => p.AtaqueId == id);
     }
     
-    public async Task<List<Ataque>> FindAllAsync()
+    public async Task<List<Ataque>> ObterTodosAsync()
     {
         return await context.Ataques.ToListAsync();
     }
 
-    public async Task<List<Ataque>> FindByTipoAsync(Tipo tipo)
+    public async Task<List<Ataque>> ObterPorTipoAsync(Tipo tipo)
     {
         return await context.Ataques
             .Where(p => p.Tipo == tipo)
             .ToListAsync();
     }
-    public void Update(Ataque ataque)
+    public void Atualizar(Ataque ataque)
     {
         context.Ataques.Update(ataque);
     }
-    public async Task<Ataque> UpdateAndCommitAsync(Ataque updatedAtaque)
+    public async Task<Ataque> AtualizarESalvarAsync(Ataque updatedAtaque)
     {
         context.Ataques.Update(updatedAtaque);
-        await SaveChangesAsync();
+        await SalvarAsync();
         return updatedAtaque;
     }
 
-    public void Remove(Ataque ataque)
+    public void Remover(Ataque ataque)
     {
         context.Ataques.Remove(ataque);
     }
-    public async Task RemoveAndCommitAsync(Ataque ataque)
+    public async Task RemoverESalvarAsync(Ataque ataque)
     {
         context.Ataques.Remove(ataque);
-        await SaveChangesAsync(); 
+        await SalvarAsync(); 
     }
 }

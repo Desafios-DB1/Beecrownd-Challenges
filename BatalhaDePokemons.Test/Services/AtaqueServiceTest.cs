@@ -25,7 +25,7 @@ public class AtaqueServiceTest
     {
         var ataque = AtaqueBuilder.Novo().Build();
 
-        _ataqueRepositoryMock.Setup(r => r.AddAndCommitAsync(It.IsAny<Ataque>())).ReturnsAsync(ataque.AtaqueId);
+        _ataqueRepositoryMock.Setup(r => r.AdicionarESalvarAsync(It.IsAny<Ataque>())).ReturnsAsync(ataque.AtaqueId);
 
         var result = await _ataqueService.CriarAsync(AtaqueMapper.MapToCreationDto(ataque));
         Assert.Equal(ataque.AtaqueId, result);
@@ -40,7 +40,7 @@ public class AtaqueServiceTest
     {
         var ataque = AtaqueBuilder.Novo().Build();
 
-        _ataqueRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ataque);
+        _ataqueRepositoryMock.Setup(r => r.ObterPorIdAsync(It.IsAny<Guid>())).ReturnsAsync(ataque);
 
         var result = await _ataqueService.ObterPorIdAsync(ataque.AtaqueId);
 
@@ -61,7 +61,7 @@ public class AtaqueServiceTest
             AtaqueBuilder.Novo().Build()
         };
 
-        _ataqueRepositoryMock.Setup(r => r.FindAllAsync()).ReturnsAsync(ataques);
+        _ataqueRepositoryMock.Setup(r => r.ObterTodosAsync()).ReturnsAsync(ataques);
 
         var result = await _ataqueService.ObterTodosAsync();
 
@@ -81,7 +81,7 @@ public class AtaqueServiceTest
             AtaqueBuilder.Novo().ComTipo(Tipo.Fogo).Build()
         };
 
-        _ataqueRepositoryMock.Setup(r => r.FindByTipoAsync(It.IsAny<Tipo>())).ReturnsAsync(ataques);
+        _ataqueRepositoryMock.Setup(r => r.ObterPorTipoAsync(It.IsAny<Tipo>())).ReturnsAsync(ataques);
 
         var result = await _ataqueService.ObterPorTipoAsync(Tipo.Fogo);
 
@@ -97,8 +97,8 @@ public class AtaqueServiceTest
     public async Task AtualizarAtaque_QuandoValido_DeveRetornarAtaqueAtualizado()
     {
         var ataque = AtaqueBuilder.Novo().Build();
-        _ataqueRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ataque);
-        _ataqueRepositoryMock.Setup(r => r.UpdateAndCommitAsync(It.IsAny<Ataque>())).ReturnsAsync(ataque);
+        _ataqueRepositoryMock.Setup(r => r.ObterPorIdAsync(It.IsAny<Guid>())).ReturnsAsync(ataque);
+        _ataqueRepositoryMock.Setup(r => r.AtualizarESalvarAsync(It.IsAny<Ataque>())).ReturnsAsync(ataque);
 
         var result = await _ataqueService.AtualizarAsync(ataque.AtaqueId, AtaqueMapper.MapToCreationDto(ataque));
             
@@ -113,11 +113,11 @@ public class AtaqueServiceTest
     public async Task RemoverAtaque_QuandoValido_DeveRemover()
     {
         var ataque = AtaqueBuilder.Novo().Build();
-        _ataqueRepositoryMock.Setup(r => r.FindByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ataque);
+        _ataqueRepositoryMock.Setup(r => r.ObterPorIdAsync(It.IsAny<Guid>())).ReturnsAsync(ataque);
 
         await _ataqueService.RemoverAsync(Guid.NewGuid());
             
-        _ataqueRepositoryMock.Verify(r => r.RemoveAndCommitAsync(It.IsAny<Ataque>()), Times.Once);
+        _ataqueRepositoryMock.Verify(r => r.RemoverESalvarAsync(It.IsAny<Ataque>()), Times.Once);
     }
 
     #endregion

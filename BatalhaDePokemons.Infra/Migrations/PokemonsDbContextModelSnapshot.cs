@@ -28,6 +28,10 @@ namespace BatalhaDePokemons.Infra.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("AtaqueId");
 
+                    b.Property<DateTime>("DataHoraCriacao")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataHoraCriacao");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -46,8 +50,7 @@ namespace BatalhaDePokemons.Infra.Migrations
                     b.Property<int>("QuantUsos")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(5)
-                        .HasColumnName("PP");
+                        .HasDefaultValue(5);
 
                     b.Property<string>("Tipo")
                         .IsRequired()
@@ -59,11 +62,46 @@ namespace BatalhaDePokemons.Infra.Migrations
                     b.ToTable("Ataques", (string)null);
                 });
 
+            modelBuilder.Entity("BatalhaDePokemons.Domain.Models.Batalha", b =>
+                {
+                    b.Property<Guid>("BatalhaId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("BatalhaId");
+
+                    b.Property<bool>("IsFinalizada")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsFinalizada");
+
+                    b.Property<Guid>("Pokemon1Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Pokemon1Id");
+
+                    b.Property<Guid>("Pokemon2Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Pokemon2Id");
+
+                    b.Property<Guid>("ProximoTurnoDoPokemonId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ProximoTurnoDoPokemonId");
+
+                    b.Property<Guid?>("VencedorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("VencedorId");
+
+                    b.HasKey("BatalhaId");
+
+                    b.ToTable("Batalhas", (string)null);
+                });
+
             modelBuilder.Entity("BatalhaDePokemons.Domain.Models.Pokemon", b =>
                 {
                     b.Property<Guid>("PokemonId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("PokemonId");
+
+                    b.Property<DateTime>("DataHoraCriacao")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataHoraCriacao");
 
                     b.Property<bool>("IsDesmaiado")
                         .ValueGeneratedOnAdd()
@@ -108,6 +146,47 @@ namespace BatalhaDePokemons.Infra.Migrations
                     b.HasIndex("AtaqueId");
 
                     b.ToTable("PokemonAtaque", (string)null);
+                });
+
+            modelBuilder.Entity("BatalhaDePokemons.Domain.Models.Turno", b =>
+                {
+                    b.Property<Guid>("TurnoId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TurnoId");
+
+                    b.Property<Guid>("AlvoId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("AlvoId");
+
+                    b.Property<Guid>("AtacanteId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("AtacanteId");
+
+                    b.Property<Guid>("AtaqueUtilizadoId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("AtaqueUtilizadoId");
+
+                    b.Property<Guid>("BatalhaId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("BatalhaId");
+
+                    b.Property<int>("DanoCausado")
+                        .HasColumnType("int")
+                        .HasColumnName("DanoCausado");
+
+                    b.Property<DateTime>("DataHoraCriacao")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataHoraCriacao");
+
+                    b.Property<int>("NumeroTurno")
+                        .HasColumnType("int")
+                        .HasColumnName("NumeroTurno");
+
+                    b.HasKey("TurnoId");
+
+                    b.HasIndex("BatalhaId");
+
+                    b.ToTable("Turnos", (string)null);
                 });
 
             modelBuilder.Entity("BatalhaDePokemons.Domain.Models.Pokemon", b =>
@@ -164,9 +243,25 @@ namespace BatalhaDePokemons.Infra.Migrations
                     b.Navigation("Pokemon");
                 });
 
+            modelBuilder.Entity("BatalhaDePokemons.Domain.Models.Turno", b =>
+                {
+                    b.HasOne("BatalhaDePokemons.Domain.Models.Batalha", "Batalha")
+                        .WithMany("Turnos")
+                        .HasForeignKey("BatalhaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Batalha");
+                });
+
             modelBuilder.Entity("BatalhaDePokemons.Domain.Models.Ataque", b =>
                 {
                     b.Navigation("PokemonAtaques");
+                });
+
+            modelBuilder.Entity("BatalhaDePokemons.Domain.Models.Batalha", b =>
+                {
+                    b.Navigation("Turnos");
                 });
 
             modelBuilder.Entity("BatalhaDePokemons.Domain.Models.Pokemon", b =>

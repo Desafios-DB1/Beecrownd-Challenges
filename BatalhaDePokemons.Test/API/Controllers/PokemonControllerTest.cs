@@ -2,6 +2,7 @@
 using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 using BatalhaDePokemons.Crosscutting.Dtos.Pokemon;
 using BatalhaDePokemons.Crosscutting.Exceptions;
+using BatalhaDePokemons.Crosscutting.Exceptions.Shared;
 using BatalhaDePokemons.Crosscutting.Interfaces;
 using BatalhaDePokemons.Domain.Mappers;
 using BatalhaDePokemons.Test.Domain.Builders;
@@ -98,7 +99,7 @@ public class PokemonControllerTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
         _pokemonServiceMock
-            .Setup(s=>s.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
+            .Setup(s=>s.ObterPorIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(PokemonMapper.MapToResponseDto(pokemon));
         
         var result = await _pokemonController.ObterPokemon(pokemon.PokemonId);
@@ -113,7 +114,7 @@ public class PokemonControllerTest
     public async Task ObterPokemon_QuandoNaoExiste_DeveLancarNotFoundException()
     {
         _pokemonServiceMock
-            .Setup(s=>s.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
+            .Setup(s=>s.ObterPorIdAsync(It.IsAny<Guid>()))
             .ThrowsAsync(new NotFoundException("Pokemon não encontrado"));
         
         var exception = await Assert.ThrowsAsync<NotFoundException>(()=>
@@ -127,7 +128,7 @@ public class PokemonControllerTest
     {
         var pokemon = PokemonBuilder.Novo().Build();
         _pokemonServiceMock
-            .Setup(s=>s.ObterPorIdComAtaquesAsync(It.IsAny<Guid>()))
+            .Setup(s=>s.ObterPorIdAsync(It.IsAny<Guid>()))
             .ThrowsAsync(new Exception("Erro no banco de dados"));
         
         var exception = await Assert.ThrowsAsync<Exception>(()=>

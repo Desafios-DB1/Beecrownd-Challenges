@@ -37,5 +37,8 @@ public class AtaqueMapping : IEntityTypeConfiguration<Ataque>
 
         builder.Property(a => a.QuantUsos)
             .HasDefaultValue(Caracteres.Cinco);
+        
+        builder.Property(a => a.DataHoraCriacao)
+            .HasColumnName(nameof(Ataque.DataHoraCriacao));
     }
 }

@@ -4,10 +4,10 @@ namespace BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 
 public class AtaqueCreationDto
 {
-    public string Nome { get; init; }
-    public string Tipo { get; set; }
-    public int Poder { get; set; }
-    public int Precisao { get; set; }
-    public int QuantUsos { get; set; }
+    public required string Nome { get; init; }
+    public required string Tipo { get; init; }
+    public int Poder { get; init; }
+    public int Precisao { get; init; }
+    public int QuantUsos { get; init; }
     
 }

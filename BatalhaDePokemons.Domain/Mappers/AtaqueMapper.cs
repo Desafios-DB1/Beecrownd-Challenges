@@ -9,6 +9,7 @@ public static class AtaqueMapper
     {
         return new AtaqueResponseDto
         {
+            AtaqueId = ataque.AtaqueId,
             Nome = ataque.Nome,
             Poder = ataque.Poder,
             QuantUsos = ataque.QuantUsos,

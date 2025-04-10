@@ -2,8 +2,10 @@ using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Crosscutting.Interfaces;
 using BatalhaDePokemons.Crosscutting.Responses;
+using BatalhaDePokemons.Crosscutting.SwaggerExamples;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace BatalhaDePokemons.API.Controllers;
 
@@ -20,6 +22,7 @@ public class AtaqueController(IAtaqueService service) : ControllerBase
     [AllowAnonymous]
     [ProducesResponseType<Guid>(StatusCodes.Status201Created)]
     [ProducesResponseType<ErrorResponse>(StatusCodes.Status400BadRequest)]
+    [SwaggerRequestExample(typeof(AtaqueCreationDto), typeof(AtaqueCreationDtoExample))]
     [HttpPost]
     public async Task<IActionResult> CriarAtaque(AtaqueCreationDto ataque)
     {
@@ -44,21 +47,6 @@ public class AtaqueController(IAtaqueService service) : ControllerBase
     }
     
     /// <summary>
-    /// Obtem todos os ataques cadastrados
-    /// </summary>
-    /// <response code="200">Lista com todos os ataques</response>
-    /// <response code="400">Erro ao obter ataques</response>
-    [AllowAnonymous]
-    [ProducesResponseType<List<AtaqueResponseDto>>(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [HttpGet]
-    public async Task<IActionResult> ObterTodosAtaques()
-    {
-        var ataques = await service.ObterTodosAsync();
-        return Ok(ataques);
-    }
-
-    /// <summary>
     /// Obtem os ataques filtrados por tipo
     /// </summary>
     /// <param name="tipo">Tipo de ataque</param>
@@ -71,6 +59,21 @@ public class AtaqueController(IAtaqueService service) : ControllerBase
     public async Task<IActionResult> ObterAtaquesPorTipo(Tipo tipo)
     {
         var ataques = await service.ObterPorTipoAsync(tipo);
+        return Ok(ataques);
+    }
+    
+    /// <summary>
+    /// Obtem todos os ataques cadastrados
+    /// </summary>
+    /// <response code="200">Lista com todos os ataques</response>
+    /// <response code="400">Erro ao obter ataques</response>
+    [AllowAnonymous]
+    [ProducesResponseType<List<AtaqueResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [HttpGet]
+    public async Task<IActionResult> ObterTodosAtaques()
+    {
+        var ataques = await service.ObterTodosAsync();
         return Ok(ataques);
     }
 

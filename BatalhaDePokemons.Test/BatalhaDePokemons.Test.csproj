@@ -24,9 +24,4 @@
     <ItemGroup>
       <ProjectReference Include="..\BatalhaDePokemons.API\BatalhaDePokemons.API.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="API\" />
-    </ItemGroup>
-
 </Project>

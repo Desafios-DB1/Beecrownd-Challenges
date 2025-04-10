@@ -21,13 +21,16 @@ public class PokemonMapping : IEntityTypeConfiguration<Pokemon>
             .HasMaxLength(Caracteres.Duzentos)
             .IsRequired();
 
-        builder.Property(p => p.Level)
-            .HasColumnName(nameof(Pokemon.Level))
+        builder.Property(p => p.Nivel)
+            .HasColumnName(nameof(Pokemon.Nivel))
             .HasDefaultValue(1);
 
         builder.Property(p=>p.IsDesmaiado)
             .HasColumnName(nameof(Pokemon.IsDesmaiado))
             .HasDefaultValue(false);
+        
+        builder.Property(p=>p.DataHoraCriacao)
+            .HasColumnName(nameof(Pokemon.DataHoraCriacao));
         
         builder.Property(p => p.Tipo)
             .HasColumnName(nameof(Pokemon.Tipo))
@@ -38,19 +41,19 @@ public class PokemonMapping : IEntityTypeConfiguration<Pokemon>
         
         builder.OwnsOne(p => p.Status, status =>
         {
-            status.Property(s => s.Hp)
+            status.Property(s => s.PontosDeVida)
                 .HasColumnName("Hp")
                 .IsRequired();
             
-            status.Property(s=>s.Spd)
+            status.Property(s=>s.Velocidade)
                 .HasColumnName("Spd")
                 .IsRequired();
             
-            status.Property(s=>s.Def)
+            status.Property(s=>s.Defesa)
                 .HasColumnName("Def")
                 .IsRequired();
             
-            status.Property(s => s.Atk)
+            status.Property(s => s.Ataque)
                 .HasColumnName("Atk")
                 .IsRequired();
         });

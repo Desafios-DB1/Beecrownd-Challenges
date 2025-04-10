@@ -12,10 +12,10 @@ public class StatusCombateBuilder
         return new StatusCombateBuilder
         {
             _faker = new Faker<StatusDeCombate>()
-                .RuleFor(p=>p.Hp, f => f.Random.Int(1, 100))
-                .RuleFor(p=>p.Spd, f => f.Random.Int(1, 100))
-                .RuleFor(p=>p.Def, f => f.Random.Int(1, 100))
-                .RuleFor(p=>p.Atk, f => f.Random.Int(1, 100))
+                .RuleFor(p=>p.PontosDeVida, f => f.Random.Int(1, 100))
+                .RuleFor(p=>p.Velocidade, f => f.Random.Int(1, 100))
+                .RuleFor(p=>p.Defesa, f => f.Random.Int(1, 100))
+                .RuleFor(p=>p.Ataque, f => f.Random.Int(1, 100))
         };
     }
 

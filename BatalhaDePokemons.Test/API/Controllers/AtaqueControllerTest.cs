@@ -2,6 +2,7 @@
 using BatalhaDePokemons.Crosscutting.Dtos.Ataque;
 using BatalhaDePokemons.Crosscutting.Enums;
 using BatalhaDePokemons.Crosscutting.Exceptions;
+using BatalhaDePokemons.Crosscutting.Exceptions.Shared;
 using BatalhaDePokemons.Crosscutting.Interfaces;
 using BatalhaDePokemons.Domain.Mappers;
 using BatalhaDePokemons.Test.Domain.Builders;
@@ -179,12 +180,13 @@ public class AtaqueControllerTest
     [Fact]
     public async Task AtualizarAtaque_QuandoNaoEncontrado_DeveLancarNotFoundException()
     {
+        var ataque = AtaqueBuilder.Novo().Build();
         _ataqueServiceMock
             .Setup(s => s.AtualizarAsync(It.IsAny<Guid>(), It.IsAny<AtaqueCreationDto>()))
             .ThrowsAsync(new NotFoundException("Ataque não encontrado"));
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            _ataqueController.AtualizarAtaque(Guid.NewGuid(), new AtaqueCreationDto()));
+            _ataqueController.AtualizarAtaque(Guid.NewGuid(), AtaqueMapper.MapToCreationDto(ataque)));
         
         Assert.Equal("Ataque não encontrado", exception.Message);
     }
