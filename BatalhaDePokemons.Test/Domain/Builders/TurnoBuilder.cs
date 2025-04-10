@@ -32,4 +32,9 @@ public class TurnoBuilder
     {
         return _faker.Generate();
     }
+
+    public List<Turno> BuildMany(int quantidade)
+    {
+        return _faker.Generate(quantidade);
+    }
 }

@@ -28,7 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BatalhaDePokemons.Application\BatalhaDePokemons.Application.csproj" />
       <ProjectReference Include="..\BatalhaDePokemons.Domain\BatalhaDePokemons.Domain.csproj" />
       <ProjectReference Include="..\BatalhaDePokemons.Infra\BatalhaDePokemons.Infra.csproj" />
     </ItemGroup>

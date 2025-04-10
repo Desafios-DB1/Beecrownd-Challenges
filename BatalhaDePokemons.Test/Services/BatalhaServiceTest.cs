@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using BatalhaDePokemons.Crosscutting.Constantes;
-using BatalhaDePokemons.Crosscutting.Dtos.Batalha;
-using BatalhaDePokemons.Crosscutting.Exceptions;
-using BatalhaDePokemons.Crosscutting.Exceptions.Batalha;
-using BatalhaDePokemons.Crosscutting.Exceptions.Pokemon;
+﻿using BatalhaDePokemons.Crosscutting.Exceptions.Batalha;
 using BatalhaDePokemons.Crosscutting.Exceptions.Shared;
-using BatalhaDePokemons.Crosscutting.Interfaces;
 using BatalhaDePokemons.Domain.Models;
 using BatalhaDePokemons.Domain.Repositories;
 using BatalhaDePokemons.Domain.Services;
 using BatalhaDePokemons.Test.Domain.Builders;
+using FluentAssertions;
 using Moq;
-using Xunit;
 
 namespace BatalhaDePokemons.Test.Services
 {
@@ -129,7 +121,7 @@ namespace BatalhaDePokemons.Test.Services
 
             var result = await _batalhaService.ObterTodasBatalhas();
 
-            Assert.NotNull(result);
+            result.Should().NotBeNull();
         }
     }
 }

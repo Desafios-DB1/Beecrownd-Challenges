@@ -21,17 +21,9 @@ public class BatalhaBuilder
         };
     }
 
-    public BatalhaBuilder ComTurnos(int quant)
+    public BatalhaBuilder ComTurnos(int quantidade)
     {
-        _faker.RuleFor(b => b.Turnos, (f, b) =>
-        {
-            var turnos = new List<Turno>();
-            for (var i = 0; i < quant; i++)
-            {
-                turnos.Add(TurnoBuilder.Novo().ComBatalhaId(b.BatalhaId).Build());
-            }
-            return turnos;
-        });
+        _faker.RuleFor(b => b.Turnos, TurnoBuilder.Novo().BuildMany(quantidade));
         return this;
     }
 
